@@ -29,7 +29,7 @@ module aperture_pin_flange(pos=0, dia=10, wid=5, ht=5) {
 }
 
 module hollow_ring(pos=0, dia=10, wid=5, ht=5) { 
-    color("blue")
+    // color("blue")
     union() {
         translate(v = [0,0,pos]) {
             difference() {
@@ -44,7 +44,7 @@ module hollow_ring(pos=0, dia=10, wid=5, ht=5) {
 }
 
 module hollow_cone(pos=0, top=51, bot=61, wid=2, ht=5) {  
-    color("blue")
+    // color("blue")
     union() {
         translate(v = [0,0,pos]) {
             difference() {
@@ -89,29 +89,28 @@ module mount_lug(pos=0, dia=46, wid=7, h=2, ang=52, rot=0) {
 }
 
 
-module e_mount_base() { // draws about 25mm above the xy plane.  oh well.
+module e_mount_base(pos=23.5) { 
+    e=6;
     union() {
-            color("blue") hollow_ring(pos=27.4,dia=43.4,wid=4,ht=5);
-            color("red") {
+            // color("red") hollow_ring(pos=27.4,dia=43.4,wid=4,ht=5);
+            // color("orange") {
                 d=46.5; // outside diameter of the flange ear
-                p=31.2; // z-axis position of the flange ear
+                p=(7.7+pos); // z-axis position of the flange ear
                 w=7.1; // width of the flange ear in the x-y plane
                 h=1.255; // z-height of the flange ear
                 mount_lug(pos=p,dia=d,wid=w,ht=h,ang=44,rot=0);
                 mount_lug(pos=p,dia=d,wid=w,ht=h,ang=52,rot=142);
                 mount_lug(pos=p,dia=d,wid=w,ht=h,ang=52,rot=(-101.5));
             }
-            color("green") hollow_ring(pos=23.56,dia=46.495,wid=7.1,ht=5);
+            // color("yellow") hollow_ring(pos=(0.06+pos),dia=46.495,wid=7.1,ht=5);
             difference() {
-                color("aqua") hollow_ring(pos=22.46,dia=61.5,wid=22.11,ht=5);
+                // color("green") hollow_ring(pos=(-1.04+pos),dia=61.5,wid=22.11,ht=5);
                 hull() {
-                    translate([24,-13,27]) sphere(1.9,$fn=global_fn);
-                    translate([23.5,-12.75,27]) sphere(1.9,$fn=global_fn);
+                    translate([(0.5+pos),-13,27]) sphere(1.9,$fn=global_fn/e);
+                    translate([(0+pos),-12.75,27]) sphere(1.9,$fn=global_fn/e);
                 }
             }
-            color("pink") hollow_ring(pos=23.5,dia=61.5,wid=1.9,ht=5);
-            
-            color("lime") hollow_cone(pos=17.5,top=51,bot=61.5,wid=6,ht=5);
+            // color("blue") hollow_ring(pos=(0+pos),dia=61.5,wid=1.9,ht=5);
         }
 }
 
@@ -146,11 +145,12 @@ module textured_ring(pos=0, dia=10, wid=1, ht=5, grid=2) {
 }
 
 module one_grip_cutout(pos=0, dia=10, wid=1, ht=5, rot=0) {
+    e=3;
     rotate(a=rot,v=[0,0,1])
     translate(v=[dia/2,0,pos+(wid/2)])
     minkowski() {
-        sphere(r=wid/2,$fn=global_fn);
-        cylinder(r=wid/2,h=ht-wid,$fn=global_fn);
+        sphere(r=wid/2,$fn=global_fn/e);
+        cylinder(r=wid/2,h=ht-wid,$fn=global_fn/e);
     }
 }
 
@@ -172,7 +172,7 @@ module one_letter(ht=1,pos=31,dia=62,ch="X",rot=0) {
     text(ch, font = ft, size = 3.75);
 }
 
-module vanity_text(pos=31,dia=62, ht=1) {
+module vanity_text(pos=31,dia=62, ht=1, name=false) {
     // really want substr()
     p = pos;
     d = dia;
@@ -186,8 +186,9 @@ module vanity_text(pos=31,dia=62, ht=1) {
     one_letter(ht=ht,pos=p,dia=d,ch="N",rot=a*4);   
     one_letter(ht=ht,pos=p,dia=d,ch="E",rot=a*5);   
     one_letter(ht=ht,pos=p,dia=d,ch="X",rot=a*6);   
-    one_letter(ht=ht,pos=p,dia=d,ch="-",rot=a*7);     
-    one_letter(ht=ht,pos=p,dia=d,ch="E",rot=a*8-3);   // more kerning
+ // one_letter(ht=ht,pos=p,dia=d,ch="-",rot=a*7);     
+ // one_letter(ht=ht,pos=p,dia=d,ch="E",rot=a*8-3);   // more kerning
+    if (name) {
  // one_letter(ht=ht,pos=p,dia=d,ch=" ",rot=a*9);   
     one_letter(ht=ht,pos=p,dia=d,ch="b",rot=a*10);   
     one_letter(ht=ht,pos=p,dia=d,ch="y",rot=a*11-1);   
@@ -205,7 +206,8 @@ module vanity_text(pos=31,dia=62, ht=1) {
     one_letter(ht=ht,pos=p,dia=d,ch="b",rot=a*21);   
     one_letter(ht=ht,pos=p,dia=d,ch="y",rot=a*22-1);   
     one_letter(ht=ht,pos=p,dia=d,ch="n",rot=a*23-3);   
-    one_letter(ht=ht,pos=p,dia=d,ch="s",rot=a*24-4);   
+    one_letter(ht=ht,pos=p,dia=d,ch="s",rot=a*24-4);
+    }   
 }   
 
 module whole_thing() {
@@ -213,22 +215,24 @@ module whole_thing() {
         union() {
             // The Sony NEX/E-Mount Base
             difference() {
-                e_mount_base();
+                e_mount_base(pos=23.5);
                 // and some vanity text
-                vanity_text(pos=24,dia=59.0, ht=2.75);
+                vanity_text(pos=23.5,dia=59.0, ht=2.75);
             }
             
             // body of the mount 
-            color("tan") hollow_ring(pos=0,dia=51,wid=8.9,ht=25);
+            // color("tan") hollow_ring(pos=0,dia=51,wid=8.9,ht=25);
+            // a 'reducer' cone so we don't have to print support
+            // color("beige") hollow_cone(pos=17.5,top=51,bot=61.5,wid=6,ht=5);
         
             // reference design
             // color("yellow") m42_nex();
     
-            color("orange") 
+            // color("orange") 
             aperture_pin_flange(pos=6.85, dia=44, wid=11, ht=10);
         
             // M42x1 threads
-            color("orangered") 
+            // color("orangered") 
             inside_threaded_ring(pos=1.25,ht=5,dia=51,thread=42,pitch=1,rot=180);
             
             // print the text
@@ -237,7 +241,7 @@ module whole_thing() {
         }
         // subtract out the grip bits at the end from everything else
         // so it gets subtraced from both the body and the thread-ring
-        grip_cutouts(pos=2,dia=55,wid=3.5,ht=15,cnt=10);
+        grip_cutouts(pos=2,dia=55,wid=3.5,ht=15,cnt=15);
     }
 }
 
