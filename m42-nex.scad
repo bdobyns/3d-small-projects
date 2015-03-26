@@ -12,7 +12,7 @@ include <threads.scad>  // from http://dkprojects.net/openscad-threads/
 
 global_fn=100;
 
-module aperture_pin_flange(pos=0,dia=10,wid=5,ht=5) { // pos, dia, wid, ht
+module aperture_pin_flange(pos=0, dia=10, wid=5, ht=5) { 
         e=0.5;
         translate(v = [0,0,pos])
         difference() {
@@ -26,7 +26,7 @@ module aperture_pin_flange(pos=0,dia=10,wid=5,ht=5) { // pos, dia, wid, ht
         }
 }
 
-module hollow_ring(pos=0,dia=10,wid=5,ht=5) { // pos, dia, wid, ht
+module hollow_ring(pos=0, dia=10, wid=5, ht=5) { 
     color("blue")
     union() {
         translate(v = [0,0,pos]) {
@@ -41,7 +41,7 @@ module hollow_ring(pos=0,dia=10,wid=5,ht=5) { // pos, dia, wid, ht
     }
 }
 
-module hollow_cone(pos=0,top=51,bot=61,wid=2,ht=5) { // pos, top, bot, wid, ht
+module hollow_cone(pos=0, top=51, bot=61, wid=2, ht=5) {  
     color("blue")
     union() {
         translate(v = [0,0,pos]) {
@@ -58,7 +58,7 @@ module hollow_cone(pos=0,top=51,bot=61,wid=2,ht=5) { // pos, top, bot, wid, ht
 
 
 
-module mount_lug(pos=0,dia=46,wid=7,h=2,ang=52,rot=0) { // pos, dia, wid, ht, ang, rot
+module mount_lug(pos=0, dia=46, wid=7, h=2, ang=52, rot=0) { 
     rotate(a=rot, v=[0,0,1])
     union() {
         e=0.02;
@@ -114,7 +114,7 @@ module e_mount_base() { // draws about 25mm above the xy plane.  oh well.
 }
 
 
-module inside_threaded_ring(pos=0,ht=5,dia=51,thread=42,pitch=1,rot=0) {  // pos, ht, dia, thread, pitch, rot
+module inside_threaded_ring(pos=0, ht=5, dia=51, thread=42, pitch=1, rot=0) {   
         e=0.5;
             rotate(a=rot, v=[0,0,1])
             translate(v=[0,0,pos])
@@ -126,7 +126,7 @@ module inside_threaded_ring(pos=0,ht=5,dia=51,thread=42,pitch=1,rot=0) {  // pos
             }
 }
 
-module textured_ring_one_dim(pos=0,dia=10,wid=1,ht=5,grid=2) { // pos, dia, wid, ht
+module textured_ring_one_dim(pos=0, dia=10, wid=1, ht=5, grid=2) { 
     e=0.5;
     translate(v=[0,0,pos])
     difference() {
@@ -137,13 +137,13 @@ module textured_ring_one_dim(pos=0,dia=10,wid=1,ht=5,grid=2) { // pos, dia, wid,
     }   
 }
 
-module textured_ring(pos=0,dia=10,wid=1,ht=5,grid=2) { // pos, dia, wid, ht
+module textured_ring(pos=0, dia=10, wid=1, ht=5, grid=2) { 
     textured_ring_one_dim(pos=pos,dia=dia,wid=wid,ht=ht,grid=grid);
     mirror([1,0,0]) 
         textured_ring_one_dim(pos=pos,dia=dia,wid=wid,ht=ht,grid=grid);
 }
 
-module grippy_bit(pos=0,dia=10,wid=1,ht=5,rot=0) {
+module one_grip_cutout(pos=0, dia=10, wid=1, ht=5, rot=0) {
     rotate(a=rot,v=[0,0,1])
     translate(v=[dia/2,0,pos+(wid/2)])
     minkowski() {
@@ -152,13 +152,59 @@ module grippy_bit(pos=0,dia=10,wid=1,ht=5,rot=0) {
     }
 }
 
-module grip_cutouts(pos=3,dia=51,wid=3,ht=15,cnt=10) {
+module grip_cutouts(pos=3, dia=51, wid=3, ht=15, cnt=10) {
      step = 360/cnt;
     for (rot = [0 : step : 360] ) {
-        grippy_bit(pos=pos, dia=dia, wid=wid, ht=ht, rot=rot);
+        one_grip_cutout(pos=pos, dia=dia, wid=wid, ht=ht, rot=rot);
      }
 }
 
+
+module one_letter(ht=1,pos=31,dia=62,ch="X",rot=0) {
+    ft = "Liberation Sans";
+    rotate(a=rot+180, v=[0,0,1]) // this moves it to the right angular position
+    translate(v=[0,-dia/2,pos]) // move to right radial/vertical position
+    rotate(a=90, v=[1,0,0]) // move text to vertical in xz plane
+    translate(v=[0,0,-1.5]) // correct for height of text
+    linear_extrude(height=ht)
+    text(ch, font = ft, size = 3.75);
+}
+
+module helpful_text(pos=31,dia=62, ht=1) {
+    // really want substr()
+    p = pos;
+    d = dia;
+    a = 7;
+
+    one_letter(ht=ht,pos=p,dia=d,ch="M",rot=a*0);  
+    one_letter(ht=ht,pos=p,dia=d,ch="4",rot=a*1+1.5);  // manual kerning
+    one_letter(ht=ht,pos=p,dia=d,ch="2",rot=a*2);   
+    one_letter(ht=ht,pos=p,dia=d,ch="-",rot=a*3);
+    one_letter(ht=ht,pos=p,dia=d,ch="-",rot=a*3+2.5);   // an em-dash
+    one_letter(ht=ht,pos=p,dia=d,ch="N",rot=a*4);   
+    one_letter(ht=ht,pos=p,dia=d,ch="E",rot=a*5);   
+    one_letter(ht=ht,pos=p,dia=d,ch="X",rot=a*6);   
+    one_letter(ht=ht,pos=p,dia=d,ch="-",rot=a*7);     
+    one_letter(ht=ht,pos=p,dia=d,ch="E",rot=a*8-3);   // more kerning
+ // one_letter(ht=ht,pos=p,dia=d,ch=" ",rot=a*9);   
+    one_letter(ht=ht,pos=p,dia=d,ch="b",rot=a*10);   
+    one_letter(ht=ht,pos=p,dia=d,ch="y",rot=a*11-1);   
+ // one_letter(ht=ht,pos=p,dia=d,ch=" ",rot=a*12);   
+    one_letter(ht=ht,pos=p,dia=d,ch="B",rot=a*13);   
+    one_letter(ht=ht,pos=p,dia=d,ch="a",rot=a*14);   
+    one_letter(ht=ht,pos=p,dia=d,ch="r",rot=a*15-1);   // kerning
+    one_letter(ht=ht,pos=p,dia=d,ch="r",rot=a*16-4);   
+    one_letter(ht=ht,pos=p,dia=d,ch="y",rot=a*16);   
+ // one_letter(ht=ht,pos=p,dia=d,ch=" ",rot=a*17);   
+    one_letter(ht=ht,pos=p,dia=d,ch="A",rot=a*18-5);   
+    one_letter(ht=ht,pos=p,dia=d,ch=".",rot=a*18+2);   
+    one_letter(ht=ht,pos=p,dia=d,ch="D",rot=a*19);   
+    one_letter(ht=ht,pos=p,dia=d,ch="o",rot=a*20+1);   
+    one_letter(ht=ht,pos=p,dia=d,ch="b",rot=a*21);   
+    one_letter(ht=ht,pos=p,dia=d,ch="y",rot=a*22-1);   
+    one_letter(ht=ht,pos=p,dia=d,ch="n",rot=a*23-3);   
+    one_letter(ht=ht,pos=p,dia=d,ch="s",rot=a*24-4);   
+}   
 
 module whole_thing() {
     difference() {
@@ -177,9 +223,14 @@ module whole_thing() {
             // M42x1 threads
             color("orangered") 
             inside_threaded_ring(pos=1.25,ht=5,dia=51,thread=42,pitch=1,rot=180);
+            
+            // print the text
+            // color("purple")
+            // helpful_text(pos=23.5,dia=59.0, ht=3);
         }
         // subtract out the grip bits at the end from everything else
         grip_cutouts(pos=3,dia=55,wid=9/4,ht=15,cnt=30);
+        helpful_text(pos=23.5,dia=59.0, ht=2.75);
     }
 }
 
