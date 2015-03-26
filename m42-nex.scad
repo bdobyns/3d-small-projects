@@ -10,7 +10,7 @@ include <threads.scad>  // from http://dkprojects.net/openscad-threads/
 // http://www.openscad.org/cheatsheet/
 // http://edutechwiki.unige.ch/en/OpenScad_beginners_tutorial
 
-global_fn=75;
+global_fn=100;
 
 module aperture_pin_flange(pos=0,dia=10,wid=5,ht=5) { // pos, dia, wid, ht
         e=0.5;
@@ -177,8 +177,8 @@ module whole_thing() {
             color("orangered") 
             inside_threaded_ring(pos=1.25,ht=5,dia=51,thread=42,pitch=1,rot=180);
         }
-        // subtract out the grip bits at the end.
-        grip_cutouts(pos=3,dia=53,wid=9/4,ht=15,cnt=20);
+        // subtract out the grip bits at the end from everything else
+        grip_cutouts(pos=3,dia=55,wid=9/4,ht=15,cnt=30);
     }
 }
 
