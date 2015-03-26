@@ -189,7 +189,7 @@ module vanity_text(pos=31,dia=62, ht=1, name=false) {
     one_letter(ht=ht,pos=p,dia=d,ch="4",rot=a*1+1.5);  // manual kerning
     one_letter(ht=ht,pos=p,dia=d,ch="2",rot=a*2);   
     one_letter(ht=ht,pos=p,dia=d,ch="-",rot=a*3);
-    one_letter(ht=ht,pos=p,dia=d,ch="-",rot=a*3+2.5);   // an em-dash
+    one_letter(ht=ht,pos=p,dia=d,ch="-",rot=a*3+2);   // an em-dash
     one_letter(ht=ht,pos=p,dia=d,ch="N",rot=a*4);   
     one_letter(ht=ht,pos=p,dia=d,ch="E",rot=a*5);   
     one_letter(ht=ht,pos=p,dia=d,ch="X",rot=a*6);   
@@ -224,29 +224,25 @@ module whole_thing() {
             difference() {
                 e_mount_base(pos=23.5);
                 // and some vanity text
-                vanity_text(pos=23.5,dia=59.0, ht=2.75);
+                vanity_text(pos=23.5,dia=64, ht=0.3);
             }
-            
+                
             // body of the mount 
             // color("tan") 
-	    hollow_ring(pos=0,dia=51,wid=8.9,ht=25);
+            hollow_ring(pos=0,dia=51,wid=8.9,ht=25);
             // a 'reducer' cone so we don't have to print support
             // color("beige") 
-	    hollow_cone(pos=17.5,top=51,bot=61.5,wid=6,ht=5);
-        
+            hollow_cone(pos=17.5,top=51,bot=61.5,wid=6,ht=5);
+            
             // reference design
             // color("yellow") m42_nex();
-    
+        
             // color("orange") 
             aperture_pin_flange(pos=6.85, dia=44, wid=11, ht=10);
-        
+            
             // M42x1 threads
             // color("orangered") 
             inside_threaded_ring(pos=1.25,ht=5,dia=51,thread=42,pitch=1,rot=180);
-            
-            // print the text
-            // color("purple")
-            // vanity_text(pos=23.5,dia=59.0, ht=3);
         }
         // subtract out the grip bits at the end from everything else
         // so it gets subtraced from both the body and the thread-ring
