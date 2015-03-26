@@ -103,8 +103,10 @@ module e_mount_base() { // draws about 25mm above the xy plane.  oh well.
             difference() {
                 color("aqua") hollow_ring(pos=22.46,dia=61.5,wid=22.11,ht=5);
             //color("salmon") {   
+                hull() {
                 translate([24,-13,27]) sphere(1.9,$fn=global_fn);
                 translate([23.5,-12.75,27]) sphere(1.9,$fn=global_fn);
+                }
             }
             color("pink") hollow_ring(pos=23.5,dia=61.5,wid=1.9,ht=5);
             
