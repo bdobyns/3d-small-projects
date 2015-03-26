@@ -1,6 +1,8 @@
 // Barry A Dobyns, bdobyns@gmail.com, March 25 2015
+// v0 - first printing attempt
+// v1 - grippy cutouts, vanity lettering
 
-include <M42_Sony_NEX_E-Mount-Lens_Adaptor_fixed.scad>
+// include <M42_Sony_NEX_E-Mount-Lens_Adaptor_fixed.scad>
 include <threads.scad>  // from http://dkprojects.net/openscad-threads/
 
 // - height determined by flange distance
@@ -170,7 +172,7 @@ module one_letter(ht=1,pos=31,dia=62,ch="X",rot=0) {
     text(ch, font = ft, size = 3.75);
 }
 
-module helpful_text(pos=31,dia=62, ht=1) {
+module vanity_text(pos=31,dia=62, ht=1) {
     // really want substr()
     p = pos;
     d = dia;
@@ -209,8 +211,13 @@ module helpful_text(pos=31,dia=62, ht=1) {
 module whole_thing() {
     difference() {
         union() {
-            e_mount_base();
-        
+            // The Sony NEX/E-Mount Base
+            difference() {
+                e_mount_base();
+                // and some vanity text
+                vanity_text(pos=24,dia=59.0, ht=2.75);
+            }
+            
             // body of the mount 
             color("tan") hollow_ring(pos=0,dia=51,wid=8.9,ht=25);
         
@@ -226,11 +233,11 @@ module whole_thing() {
             
             // print the text
             // color("purple")
-            // helpful_text(pos=23.5,dia=59.0, ht=3);
+            // vanity_text(pos=23.5,dia=59.0, ht=3);
         }
         // subtract out the grip bits at the end from everything else
-        grip_cutouts(pos=3,dia=55,wid=9/4,ht=15,cnt=30);
-        helpful_text(pos=23.5,dia=59.0, ht=2.75);
+        // so it gets subtraced from both the body and the thread-ring
+        grip_cutouts(pos=2,dia=55,wid=3.5,ht=15,cnt=10);
     }
 }
 
