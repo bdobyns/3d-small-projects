@@ -3,8 +3,14 @@
 include <M42_Sony_NEX_E-Mount-Lens_Adaptor_fixed.scad>
 include <threads.scad>  // from http://dkprojects.net/openscad-threads/
 
+// - height determined by flange distance
+// see http://www.graphics.cornell.edu/~westin/misc/mounts-by-register.html
+
 // http://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#color
 // http://www.openscad.org/cheatsheet/
+// http://edutechwiki.unige.ch/en/OpenScad_beginners_tutorial
+
+global_fn=75;
 
 module aperture_pin_flange(pos=0,dia=10,wid=5,ht=5) { // pos, dia, wid, ht
         e=0.5;
@@ -15,7 +21,7 @@ module aperture_pin_flange(pos=0,dia=10,wid=5,ht=5) { // pos, dia, wid, ht
             
             // the hole
             translate([0,0,-e]) { 
-                cylinder(h=(ht+2*e), d2=(dia+2*e), d1=(dia-wid), $fn=100); 
+                cylinder(h=(ht+2*e), d2=(dia+2*e), d1=(dia-wid), $fn=global_fn); 
             }
         }
 }
@@ -25,7 +31,7 @@ module hollow_ring(pos=0,dia=10,wid=5,ht=5) { // pos, dia, wid, ht
     union() {
         translate(v = [0,0,pos]) {
             difference() {
-                $fn=360;
+                $fn=global_fn;
                 cylinder(h=ht,d=dia);
                 translate([0,0,-0.5]) {
                     cylinder(h=(ht+1),d=(dia-wid));
@@ -40,7 +46,7 @@ module hollow_cone(pos=0,top=51,bot=61,wid=2,ht=5) { // pos, top, bot, wid, ht
     union() {
         translate(v = [0,0,pos]) {
             difference() {
-                $fn=360;
+                $fn=global_fn;
                 cylinder(h=ht,d1=top,d2=bot);
                 translate([0,0,-0.5]) {
                     cylinder(h=(ht+1),d=(top-wid));
@@ -58,7 +64,7 @@ module mount_lug(pos=0,dia=46,wid=7,h=2,ang=52,rot=0) { // pos, dia, wid, ht, an
         e=0.02;
         translate(v = [0,0,pos]) {
             difference() {
-                $fn=360;
+                $fn=global_fn;
                 // make a disc
                 cylinder(h=ht,d=dia);
                 // cutout in the disc makes a ring
@@ -97,8 +103,8 @@ module e_mount_base() { // draws about 25mm above the xy plane.  oh well.
             difference() {
                 color("aqua") hollow_ring(pos=22.46,dia=61.5,wid=22.11,ht=5);
             //color("salmon") {   
-                translate([24,-13,27]) sphere(1.9,$fn=100);
-                translate([23.5,-12.75,27]) sphere(1.9,$fn=100);
+                translate([24,-13,27]) sphere(1.9,$fn=global_fn);
+                translate([23.5,-12.75,27]) sphere(1.9,$fn=global_fn);
             }
             color("pink") hollow_ring(pos=23.5,dia=61.5,wid=1.9,ht=5);
             
@@ -136,23 +142,31 @@ module textured_ring(pos=0,dia=10,wid=1,ht=5,grid=2) { // pos, dia, wid, ht
         textured_ring_one_dim(pos=pos,dia=dia,wid=wid,ht=ht,grid=grid);
 }
 
+module grippy_bit(pos=0,dia=10,wid=1,ht=5,rot=0) {
+    rotate(a=rot,v=[0,0,1])
+    translate(v=[dia/2,0,pos+(wid/2)])
+    minkowski() {
+        sphere(r=wid/2,$fn=global_fn);
+        cylinder(r=wid/2,h=ht-wid,$fn=global_fn);
+    }
+}
+
+module grip_cutouts(pos=3,dia=51,wid=3,ht=15,cnt=10) {
+     step = 360/cnt;
+    for (rot = [0 : step : 360] ) {
+        grippy_bit(pos=pos, dia=dia, wid=wid, ht=ht, rot=rot);
+     }
+}
+
+
 module whole_thing() {
-    union() {
+    difference() {
+        union() {
             e_mount_base();
         
             // body of the mount 
-            // - height determined by flange distance
-            // see http://www.graphics.cornell.edu/~westin/misc/mounts-by-register.html
             color("tan") hollow_ring(pos=0,dia=51,wid=8.9,ht=25);
-            // this is just an artistic pattern for grippy surface
-            // you want to draw the textured ring on top of the body cylinder
-            // it's a grid kind of like a knurled surface
-            color("darkblue") 
-            textured_ring(pos=0,dia=51.1,wid=8,ht=25,grid=5);
         
-            // the cone is an alternative to the textured body
-            // color("purple") hollow_cone(pos=0,bot=61.5,top=51,wid=8.8,ht=23);
-                    
             // reference design
             // color("yellow") m42_nex();
     
@@ -162,6 +176,9 @@ module whole_thing() {
             // M42x1 threads
             color("orangered") 
             inside_threaded_ring(pos=1.25,ht=5,dia=51,thread=42,pitch=1,rot=180);
+        }
+        // subtract out the grip bits at the end.
+        grip_cutouts(pos=3,dia=53,wid=9/4,ht=15,cnt=20);
     }
 }
 
