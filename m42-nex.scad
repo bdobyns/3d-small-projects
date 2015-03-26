@@ -1,6 +1,7 @@
 // Barry A Dobyns, bdobyns@gmail.com, March 25 2015
 // v0 - first printing attempt
 // v1 - grippy cutouts, vanity lettering
+// v2 - fine-tuned so that it can F6 render and produce an STL
 
 // include <M42_Sony_NEX_E-Mount-Lens_Adaptor_fixed.scad>
 include <threads.scad>  // from http://dkprojects.net/openscad-threads/
@@ -8,6 +9,7 @@ include <threads.scad>  // from http://dkprojects.net/openscad-threads/
 // - height determined by flange distance
 // see http://www.graphics.cornell.edu/~westin/misc/mounts-by-register.html
 
+// helpful see also
 // http://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#color
 // http://www.openscad.org/cheatsheet/
 // http://edutechwiki.unige.ch/en/OpenScad_beginners_tutorial
@@ -92,8 +94,10 @@ module mount_lug(pos=0, dia=46, wid=7, h=2, ang=52, rot=0) {
 module e_mount_base(pos=23.5) { 
     e=6;
     union() {
-            // color("red") hollow_ring(pos=27.4,dia=43.4,wid=4,ht=5);
-            // color("orange") {
+            // color("red") 
+	    hollow_ring(pos=27.4,dia=43.4,wid=4,ht=5);
+            // color("orange") 
+	    union() {
                 d=46.5; // outside diameter of the flange ear
                 p=(7.7+pos); // z-axis position of the flange ear
                 w=7.1; // width of the flange ear in the x-y plane
@@ -102,15 +106,18 @@ module e_mount_base(pos=23.5) {
                 mount_lug(pos=p,dia=d,wid=w,ht=h,ang=52,rot=142);
                 mount_lug(pos=p,dia=d,wid=w,ht=h,ang=52,rot=(-101.5));
             }
-            // color("yellow") hollow_ring(pos=(0.06+pos),dia=46.495,wid=7.1,ht=5);
+            // color("yellow") 
+	    hollow_ring(pos=(0.06+pos),dia=46.495,wid=7.1,ht=5);
             difference() {
-                // color("green") hollow_ring(pos=(-1.04+pos),dia=61.5,wid=22.11,ht=5);
+                // color("green") 
+		hollow_ring(pos=(-1.04+pos),dia=61.5,wid=22.11,ht=5);
                 hull() {
                     translate([(0.5+pos),-13,27]) sphere(1.9,$fn=global_fn/e);
                     translate([(0+pos),-12.75,27]) sphere(1.9,$fn=global_fn/e);
                 }
             }
-            // color("blue") hollow_ring(pos=(0+pos),dia=61.5,wid=1.9,ht=5);
+            // color("blue") 
+	    hollow_ring(pos=(0+pos),dia=61.5,wid=1.9,ht=5);
         }
 }
 
@@ -221,9 +228,11 @@ module whole_thing() {
             }
             
             // body of the mount 
-            // color("tan") hollow_ring(pos=0,dia=51,wid=8.9,ht=25);
+            // color("tan") 
+	    hollow_ring(pos=0,dia=51,wid=8.9,ht=25);
             // a 'reducer' cone so we don't have to print support
-            // color("beige") hollow_cone(pos=17.5,top=51,bot=61.5,wid=6,ht=5);
+            // color("beige") 
+	    hollow_cone(pos=17.5,top=51,bot=61.5,wid=6,ht=5);
         
             // reference design
             // color("yellow") m42_nex();
