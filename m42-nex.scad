@@ -126,6 +126,11 @@ module e_mount_base(pos=23.5, clr=false) {
         // outer rim on base plate
         color("blue") 
 	    hollow_ring(pos=(0+pos),dia=61.5,wid=1.9,ht=5);
+        
+        // index mark
+        rotate(a=175, v=[0,0,1])
+        translate(v=[26,0,(-1.3+pos)])
+        cube(size=[5,2,5.26]);
     }
 }
 
@@ -160,12 +165,12 @@ module textured_ring(pos=0, dia=10, wid=1, ht=5, grid=2) {
 }
 
 module one_grip_cutout(pos=0, dia=10, wid=1, ht=5, rot=0) {
-    e=3;
+    e=5;
     rotate(a=rot,v=[0,0,1])
-    translate(v=[dia/2,0,pos+(wid/2)])
-    minkowski() {
-        sphere(r=wid/2,$fn=global_fn/e);
-        cylinder(r=wid/2,h=ht-wid,$fn=global_fn/e);
+    translate(v=[dia/2,0,pos])
+    hull() {
+        translate(v=[0,0,wid/2]) sphere(r=wid/2,$fn=global_fn/e);
+        translate(v=[0,0,ht])    sphere(r=wid/2,$fn=global_fn/e);
     }
 }
 
@@ -179,7 +184,7 @@ module grip_cutouts(pos=3, dia=51, wid=3, ht=15, cnt=10) {
 
 module one_letter(ht=1,pos=31,dia=62,ch="X",rot=0) {
     ft = "Liberation Sans";
-    rotate(a=rot+180, v=[0,0,1]) // this moves it to the right angular position
+    rotate(a=rot+150, v=[0,0,1]) // this moves it to the right angular position
     translate(v=[0,-dia/2,pos]) // move to right radial/vertical position
     rotate(a=90, v=[1,0,0]) // move text to vertical in xz plane
     translate(v=[0,0,-1.5]) // correct for height of text
@@ -187,11 +192,11 @@ module one_letter(ht=1,pos=31,dia=62,ch="X",rot=0) {
     text(ch, font = ft, size = 3.75);
 }
 
-module vanity_text(pos=31,dia=62, ht=1, name=false) {
+module vanity_text(pos=31,dia=62, ht=1, name=true) {
     // really want substr()
     p = pos;
     d = dia;
-    a = 7;
+    a = 7; // nominal width of a letter position
 
     one_letter(ht=ht,pos=p,dia=d,ch="M",rot=a*0);  
     one_letter(ht=ht,pos=p,dia=d,ch="4",rot=a*1+1.5);  // manual kerning
@@ -201,27 +206,27 @@ module vanity_text(pos=31,dia=62, ht=1, name=false) {
     one_letter(ht=ht,pos=p,dia=d,ch="N",rot=a*4);   
     one_letter(ht=ht,pos=p,dia=d,ch="E",rot=a*5);   
     one_letter(ht=ht,pos=p,dia=d,ch="X",rot=a*6);   
- // one_letter(ht=ht,pos=p,dia=d,ch="-",rot=a*7);     
- // one_letter(ht=ht,pos=p,dia=d,ch="E",rot=a*8-3);   // more kerning
+
     if (name) {
- // one_letter(ht=ht,pos=p,dia=d,ch=" ",rot=a*9);   
-    one_letter(ht=ht,pos=p,dia=d,ch="b",rot=a*10);   
-    one_letter(ht=ht,pos=p,dia=d,ch="y",rot=a*11-1);   
- // one_letter(ht=ht,pos=p,dia=d,ch=" ",rot=a*12);   
-    one_letter(ht=ht,pos=p,dia=d,ch="B",rot=a*13);   
-    one_letter(ht=ht,pos=p,dia=d,ch="a",rot=a*14);   
-    one_letter(ht=ht,pos=p,dia=d,ch="r",rot=a*15-1);   // kerning
-    one_letter(ht=ht,pos=p,dia=d,ch="r",rot=a*16-4);   
-    one_letter(ht=ht,pos=p,dia=d,ch="y",rot=a*16);   
- // one_letter(ht=ht,pos=p,dia=d,ch=" ",rot=a*17);   
-    one_letter(ht=ht,pos=p,dia=d,ch="A",rot=a*18-5);   
-    one_letter(ht=ht,pos=p,dia=d,ch=".",rot=a*18+2);   
-    one_letter(ht=ht,pos=p,dia=d,ch="D",rot=a*19);   
-    one_letter(ht=ht,pos=p,dia=d,ch="o",rot=a*20+1);   
-    one_letter(ht=ht,pos=p,dia=d,ch="b",rot=a*21);   
-    one_letter(ht=ht,pos=p,dia=d,ch="y",rot=a*22-1);   
-    one_letter(ht=ht,pos=p,dia=d,ch="n",rot=a*23-3);   
-    one_letter(ht=ht,pos=p,dia=d,ch="s",rot=a*24-4);
+        e=125;
+ //     one_letter(ht=ht,pos=p,dia=d,ch=" ",rot=e+a*1);   
+        one_letter(ht=ht,pos=p,dia=d,ch="b",rot=e+a*0);   
+        one_letter(ht=ht,pos=p,dia=d,ch="y",rot=e+a*1-1);   
+ //     one_letter(ht=ht,pos=p,dia=d,ch=" ",rot=e+a*2);   
+        one_letter(ht=ht,pos=p,dia=d,ch="B",rot=e+a*3);   
+        one_letter(ht=ht,pos=p,dia=d,ch="a",rot=e+a*4);   
+        one_letter(ht=ht,pos=p,dia=d,ch="r",rot=e+a*5-1);   // kerning
+        one_letter(ht=ht,pos=p,dia=d,ch="r",rot=e+a*6-4);   
+        one_letter(ht=ht,pos=p,dia=d,ch="y",rot=e+a*6);   
+ //     one_letter(ht=ht,pos=p,dia=d,ch=" ",rot=e+a*7);   
+        one_letter(ht=ht,pos=p,dia=d,ch="A",rot=e+a*8-5);   
+        one_letter(ht=ht,pos=p,dia=d,ch=".",rot=e+a*8+2);   
+        one_letter(ht=ht,pos=p,dia=d,ch="D",rot=e+a*9);   
+        one_letter(ht=ht,pos=p,dia=d,ch="o",rot=e+a*10+1);   
+        one_letter(ht=ht,pos=p,dia=d,ch="b",rot=e+a*11);   
+        one_letter(ht=ht,pos=p,dia=d,ch="y",rot=e+a*12-1);   
+        one_letter(ht=ht,pos=p,dia=d,ch="n",rot=e+a*13-3);   
+        one_letter(ht=ht,pos=p,dia=d,ch="s",rot=e+a*14-4);
     }   
 }   
 
@@ -242,19 +247,16 @@ module whole_thing() {
             color("beige") 
             hollow_cone(pos=17.5,top=51,bot=60,wid=5,ht=5);
             
-            // reference design
-            // color("yellow") m42_nex();
-        
             color("orange") 
             aperture_pin_flange(pos=6.85, dia=44, wid=7.25, ht=20);
             
             // M42x1 threads
-            // color("orangered") 
+            color("orangered") 
             inside_threaded_ring(pos=1.25,ht=5,dia=51,thread=42,pitch=1,rot=180);
         }
         // subtract out the grip bits at the end from everything else
         // so it gets subtraced from both the body and the thread-ring
-        grip_cutouts(pos=2,dia=55,wid=3.5,ht=15,cnt=15);
+        grip_cutouts(pos=2,dia=51,wid=4,ht=14.25,cnt=18);
     }
     
     // reference measure for id of aperture flange
