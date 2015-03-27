@@ -16,10 +16,11 @@ include <threads.scad>  // from http://dkprojects.net/openscad-threads/
 
 global_fn=100;
 
-module aperture_pin_flange(pos=0, dia=10, wid=5, ht=5) { 
+module chamfered_ring(pos=0, dia=10, wid=5, ht=5, flip=false) { 
         e=0.5;
-        translate(v = [0,0,pos])
-        difference() {
+        if (flip) flip_chamfered_ring(pos=pos,dia=dia,wid=wid,ht=ht);
+        else translate(v = [0,0,pos]) 
+            difference() {
             // the plate
             cylinder(h=ht, d=dia);
             
@@ -28,6 +29,12 @@ module aperture_pin_flange(pos=0, dia=10, wid=5, ht=5) {
                 cylinder(h=(ht+2*e), d2=(dia+2*e), d1=(dia-wid), $fn=global_fn); 
             }
         }
+}
+
+module flip_chamfered_ring(pos=0,dia=10,wid=5,ht=5) {
+    translate(v=[0,0,pos+ht]) // offset by the height since we flipped it over
+    rotate(a=180,v=[1,0,0])
+    chamfered_ring(pos=0,dia=dia,wid=wid,ht=ht,flip=false);
 }
 
 module hollow_ring(pos=0, dia=10, wid=5, ht=5) { 
@@ -92,8 +99,8 @@ module mount_lug(pos=0, dia=46, wid=7, ht=2, ang=52, rot=0) {
 
 
 module e_mount_base(pos=23.5, clr=false) { 
-    e=6;
-    id=39.4;
+    e=6;  // small epsilon
+    id=39.4; // inside diameter for the rings
     union() {
         // cylinder inside mount hole
         color("red") 
@@ -129,14 +136,14 @@ module e_mount_base(pos=23.5, clr=false) {
         
         // index mark
         rotate(a=175, v=[0,0,1])
-        translate(v=[26,0,(-1.3+pos)])
-        cube(size=[5,2,5.26]);
+        translate(v=[26,0,(-1.5+pos)])
+        cube(size=[5.25,2,5.46]);
     }
 }
 
 
 module inside_threaded_ring(pos=0, ht=5, dia=51, thread=42, pitch=1, rot=0) {   
-        e=0.5;
+        e=1.0;
             rotate(a=rot, v=[0,0,1])
             translate(v=[0,0,pos])
             difference() {
@@ -239,29 +246,35 @@ module whole_thing() {
                 // and some vanity text
                 vanity_text(pos=23.5,dia=64, ht=0.3);
             }
-                
+            
             // body of the mount 
             color("tan") 
-            hollow_ring(pos=0,dia=51,wid=8.9,ht=25);
+            hollow_ring(pos=0,dia=51,wid=8.25,ht=25);
             // a 'reducer' cone so we don't have to print support
             color("beige") 
             hollow_cone(pos=17.5,top=51,bot=60,wid=5,ht=5);
             
-            color("orange") 
-            aperture_pin_flange(pos=6.85, dia=44, wid=7.25, ht=20);
+            // the aperture flange
+            color("orange")    
+            difference() {
+                chamfered_ring(pos=6.0, dia=44, wid=7.25, ht=10);
+                // a cut-out to protect the threads
+                // from printing support for the flange
+                chamfered_ring(pos=6.,dia=44.1,wid=5,ht=4);
+            }
+            
+            // angled join between mount and body - prints better than a ledge
+            color("aqua")
+            chamfered_ring(pos=17.4, dia=44.25,wid=5,ht=5,flip=true);
             
             // M42x1 threads
             color("orangered") 
-            inside_threaded_ring(pos=1.25,ht=5,dia=51,thread=42,pitch=1,rot=180);
+            inside_threaded_ring(pos=1.25,ht=4.25,dia=50,thread=42.25,pitch=1,rot=180);
         }
         // subtract out the grip bits at the end from everything else
         // so it gets subtraced from both the body and the thread-ring
-        grip_cutouts(pos=2,dia=51,wid=4,ht=14.25,cnt=18);
-    }
-    
-    // reference measure for id of aperture flange
-    //color("pink")
-    //cylinder(h=25,d=36.72);
+        grip_cutouts(pos=2,dia=51,wid=4,ht=14.25,cnt=20);
+    } 
 }
 
 whole_thing();
