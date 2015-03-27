@@ -2,6 +2,7 @@
 // v0 - first printing attempt
 // v1 - grippy cutouts, vanity lettering
 // v2 - fine-tuned so that it can F6 render and produce an STL
+// v3 - airgap between threads and aperture flange so the support doesn't touch
 
 // include <M42_Sony_NEX_E-Mount-Lens_Adaptor_fixed.scad>
 include <threads.scad>  // from http://dkprojects.net/openscad-threads/
@@ -138,6 +139,17 @@ module e_mount_base(pos=23.5, clr=false) {
         rotate(a=175, v=[0,0,1])
         translate(v=[26,0,(-1.5+pos)])
         cube(size=[5.25,2,5.46]);
+        
+        // index mark support
+        rotate(a=-83, v=[0,0,1])
+        difference() {
+            hollow_cone(pos=17.5,top=51,bot=62,wid=5,ht=4.5);
+            translate(v=[30.6,0,0]) cube([70,70,70], center=true);
+            rotate(a=160.5,v=[0,0,1]) translate(v=[31,0,0]) cube([70,70,70], center=true);
+            // translate(v=[0,-31,0]) cube([70,70,70], center=true);            
+
+        }
+            
     }
 }
 
