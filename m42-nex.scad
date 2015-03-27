@@ -52,14 +52,18 @@ module hollow_ring(pos=0, od=10, id=5, ht=5) {
     }
 }
 
-module hollow_cone(pos=0, top=51, bot=61, wid=2, ht=5) {  
+module hollow_cone(pos=0, od_top=51, od_bot=61, wid=2, ht=5, id_top=0, id_bot=0) { 
+   // either use the wid=n argument OR
+   // use id_top and id_bot 
     union() {
         translate(v = [0,0,pos]) {
             difference() {
                 $fn=global_fn;
-                cylinder(h=ht,d1=top,d2=bot);
+                cylinder(h=ht,d1=od_top,d2=od_bot);
                 translate([0,0,-0.5]) {
-                    cylinder(h=(ht+1),d=(top-wid));
+                    if (id_top > 1 && id_bot > 0)
+                        cylinder(h=(ht+1), d1=id_top, d2=id_bot);
+                    else cylinder(h=(ht+1),d1=(od_top-wid), d2=(od_bot-wid));
                 }
             }
         }
@@ -97,8 +101,8 @@ module mount_lug(pos=0, dia=46, wid=7, ht=2, ang=52, rot=0) {
 }
 
 
-module e_mount_base(pos=23.5, clr=false) { 
-    e=6;  // small epsilon
+module e_mount_base(pos=23.5, index=true) { 
+    e=6;  // small epsilon for low-res circles
     id=39.4; // inside diameter for the rings
     union() {
         // cylinder inside mount hole
@@ -122,8 +126,8 @@ module e_mount_base(pos=23.5, clr=false) {
             hollow_ring(pos=(-1.04+pos),od=61.5,id=id,ht=5);
             // latch cutout
             hull() {
-                translate([24,-13,(3.5+pos)]) sphere(1.7,$fn=global_fn/e);
-                translate([23.5,-12.75,(3.5+pos)]) sphere(1.7,$fn=global_fn/e);
+                translate([24,-13,(3.5+pos)]) sphere(1.5,$fn=global_fn/e);
+                translate([22.25,-12,(3.5+pos)]) sphere(1.5,$fn=global_fn/e);
             }
         }
         // inner rim on base plate
@@ -131,21 +135,26 @@ module e_mount_base(pos=23.5, clr=false) {
 	    hollow_ring(pos=(0.06+pos),od=46.495,id=id,ht=5);
         // outer rim on base plate
         color("blue") 
-	    hollow_ring(pos=(0+pos),od=61.5,id=(61.5-1.9),ht=5);
+	    hollow_ring(pos=(0+pos),od=61.5,id=59.6,ht=5);
         
-        // index mark
-        rotate(a=175, v=[0,0,1])
-        translate(v=[26,0,(-1.5+pos)])
-        cube(size=[5.25,2,5.46]);
+        if (index) {
+            // index mark that stands up
+            rotate(a=175, v=[0,0,1])
+            translate(v=[26,0,(-1.5+pos)])
+            cube(size=[5.25,2,5.46]);
         
-        // index mark support
-        rotate(a=-83, v=[0,0,1])
-        difference() {
-            hollow_cone(pos=17.5,top=51,bot=62,wid=5,ht=4.5);
-            translate(v=[30.6,0,0]) cube([70,70,70], center=true);
-            rotate(a=160.5,v=[0,0,1]) translate(v=[31,0,0]) cube([70,70,70], center=true);
-            // translate(v=[0,-31,0]) cube([70,70,70], center=true);            
-
+            // index mark print support (no removable support needed)
+            rotate(a=-83, v=[0,0,1])
+            difference() {
+                hollow_cone(pos=(-6+pos), od_top=51, od_bot=62.5, wid=10, ht=4.5);
+                translate(v=[30.6,0,0]) cube([70,70,70], center=true);
+                rotate(a=160.5,v=[0,0,1]) translate(v=[31,0,0]) cube([70,70,70], center=true);
+            }
+        } else {
+            // index mark that's flush with the main base plate
+            rotate(a=175, v=[0,0,1])
+            translate(v=[26,0,(-1.04+pos)])
+            cube(size=[5.25,2,5]);
         }
             
     }
@@ -162,23 +171,6 @@ module inside_threaded_ring(pos=0, ht=5, dia=51, thread=42, pitch=1, rot=0) {
                     metric_thread(thread,pitch,ht+2*e,internal=true);
                 cylinder(h=(ht+2*e),d=(thread*0.5));
             }
-}
-
-module textured_ring_one_dim(pos=0, dia=10, wid=1, ht=5, grid=2) { 
-    e=0.5;
-    translate(v=[0,0,pos])
-    difference() {
-        metric_thread(dia,grid,ht,n_starts=dia*3/grid);
-        translate([0,0,-e]) {
-                    cylinder(h=(ht+2*e),d=(dia-wid));
-        }
-    }   
-}
-
-module textured_ring(pos=0, dia=10, wid=1, ht=5, grid=2) { 
-    textured_ring_one_dim(pos=pos,dia=dia,wid=wid,ht=ht,grid=grid);
-    mirror([1,0,0]) 
-        textured_ring_one_dim(pos=pos,dia=dia,wid=wid,ht=ht,grid=grid);
 }
 
 module one_grip_cutout(pos=0, dia=10, wid=1, ht=5, rot=0) {
@@ -199,7 +191,7 @@ module grip_cutouts(pos=3, dia=51, wid=3, ht=15, cnt=10) {
 }
 
 
-module one_letter(ht=1,pos=31,dia=62,ch="X",rot=0) {
+module radial_letter(ht=1,pos=31,dia=62,ch="X",rot=0) {
     ft = "Liberation Sans";
     rotate(a=rot+150, v=[0,0,1]) // this moves it to the right angular position
     translate(v=[0,-dia/2,pos]) // move to right radial/vertical position
@@ -215,35 +207,35 @@ module vanity_text(pos=31,dia=62, ht=1, name=true) {
     d = dia;
     a = 7; // nominal width of a letter position
 
-    one_letter(ht=ht,pos=p,dia=d,ch="M",rot=a*0);  
-    one_letter(ht=ht,pos=p,dia=d,ch="4",rot=a*1+1.5);  // manual kerning
-    one_letter(ht=ht,pos=p,dia=d,ch="2",rot=a*2);   
-    one_letter(ht=ht,pos=p,dia=d,ch="-",rot=a*3);
-    one_letter(ht=ht,pos=p,dia=d,ch="-",rot=a*3+2);   // an em-dash
-    one_letter(ht=ht,pos=p,dia=d,ch="N",rot=a*4);   
-    one_letter(ht=ht,pos=p,dia=d,ch="E",rot=a*5);   
-    one_letter(ht=ht,pos=p,dia=d,ch="X",rot=a*6);   
+    radial_letter(ht=ht,pos=p,dia=d,ch="M",rot=a*0);  
+    radial_letter(ht=ht,pos=p,dia=d,ch="4",rot=a*1+1.5);  // manual kerning
+    radial_letter(ht=ht,pos=p,dia=d,ch="2",rot=a*2);   
+    radial_letter(ht=ht,pos=p,dia=d,ch="-",rot=a*3);
+    radial_letter(ht=ht,pos=p,dia=d,ch="-",rot=a*3+2);   // an em-dash
+    radial_letter(ht=ht,pos=p,dia=d,ch="N",rot=a*4);   
+    radial_letter(ht=ht,pos=p,dia=d,ch="E",rot=a*5);   
+    radial_letter(ht=ht,pos=p,dia=d,ch="X",rot=a*6);   
 
     if (name) {
         e=125;
- //     one_letter(ht=ht,pos=p,dia=d,ch=" ",rot=e+a*1);   
-        one_letter(ht=ht,pos=p,dia=d,ch="b",rot=e+a*0);   
-        one_letter(ht=ht,pos=p,dia=d,ch="y",rot=e+a*1-1);   
- //     one_letter(ht=ht,pos=p,dia=d,ch=" ",rot=e+a*2);   
-        one_letter(ht=ht,pos=p,dia=d,ch="B",rot=e+a*3);   
-        one_letter(ht=ht,pos=p,dia=d,ch="a",rot=e+a*4);   
-        one_letter(ht=ht,pos=p,dia=d,ch="r",rot=e+a*5-1);   // kerning
-        one_letter(ht=ht,pos=p,dia=d,ch="r",rot=e+a*6-4);   
-        one_letter(ht=ht,pos=p,dia=d,ch="y",rot=e+a*6);   
- //     one_letter(ht=ht,pos=p,dia=d,ch=" ",rot=e+a*7);   
-        one_letter(ht=ht,pos=p,dia=d,ch="A",rot=e+a*8-5);   
-        one_letter(ht=ht,pos=p,dia=d,ch=".",rot=e+a*8+2);   
-        one_letter(ht=ht,pos=p,dia=d,ch="D",rot=e+a*9);   
-        one_letter(ht=ht,pos=p,dia=d,ch="o",rot=e+a*10+1);   
-        one_letter(ht=ht,pos=p,dia=d,ch="b",rot=e+a*11);   
-        one_letter(ht=ht,pos=p,dia=d,ch="y",rot=e+a*12-1);   
-        one_letter(ht=ht,pos=p,dia=d,ch="n",rot=e+a*13-3);   
-        one_letter(ht=ht,pos=p,dia=d,ch="s",rot=e+a*14-4);
+ //     radial_letter(ht=ht,pos=p,dia=d,ch=" ",rot=e+a*1);   
+        radial_letter(ht=ht,pos=p,dia=d,ch="b",rot=e+a*0);   
+        radial_letter(ht=ht,pos=p,dia=d,ch="y",rot=e+a*1-1);   
+ //     radial_letter(ht=ht,pos=p,dia=d,ch=" ",rot=e+a*2);   
+        radial_letter(ht=ht,pos=p,dia=d,ch="B",rot=e+a*3);   
+        radial_letter(ht=ht,pos=p,dia=d,ch="a",rot=e+a*4);   
+        radial_letter(ht=ht,pos=p,dia=d,ch="r",rot=e+a*5-1);   // kerning
+        radial_letter(ht=ht,pos=p,dia=d,ch="r",rot=e+a*6-4);   
+        radial_letter(ht=ht,pos=p,dia=d,ch="y",rot=e+a*6);   
+ //     radial_letter(ht=ht,pos=p,dia=d,ch=" ",rot=e+a*7);   
+        radial_letter(ht=ht,pos=p,dia=d,ch="A",rot=e+a*8-5);   
+        radial_letter(ht=ht,pos=p,dia=d,ch=".",rot=e+a*8+2);   
+        radial_letter(ht=ht,pos=p,dia=d,ch="D",rot=e+a*9);   
+        radial_letter(ht=ht,pos=p,dia=d,ch="o",rot=e+a*10+1);   
+        radial_letter(ht=ht,pos=p,dia=d,ch="b",rot=e+a*11);   
+        radial_letter(ht=ht,pos=p,dia=d,ch="y",rot=e+a*12-1);   
+        radial_letter(ht=ht,pos=p,dia=d,ch="n",rot=e+a*13-3);   
+        radial_letter(ht=ht,pos=p,dia=d,ch="s",rot=e+a*14-4);
     }   
 }   
 
@@ -262,7 +254,7 @@ module whole_thing() {
             hollow_ring(pos=0,od=51,id=(51-8.25),ht=25);
             // a 'reducer' cone so we don't have to print support
             color("beige") 
-            hollow_cone(pos=17.5,top=51,bot=60,wid=5,ht=5);
+            hollow_cone(pos=17.5,od_top=51,od_bot=60,wid=5,ht=5);
             
             // the aperture flange
             color("orange")    
