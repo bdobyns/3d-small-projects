@@ -17,36 +17,35 @@ include <threads.scad>  // from http://dkprojects.net/openscad-threads/
 
 global_fn=100;
 
-module chamfered_ring(pos=0, dia=10, wid=5, ht=5, flip=false) { 
+module chamfered_ring(pos=0, od=10, id=5, ht=5, flip=false) { // triangle cross section
         e=0.5;
-        if (flip) flip_chamfered_ring(pos=pos,dia=dia,wid=wid,ht=ht);
+        if (flip) flip_chamfered_ring(pos=pos,od=od,id=id, ht=ht);
         else translate(v = [0,0,pos]) 
             difference() {
             // the plate
-            cylinder(h=ht, d=dia);
+            cylinder(h=ht, d=od);
             
-            // the hole
+            // the hole tapers to a sharp edge
             translate([0,0,-e]) { 
-                cylinder(h=(ht+2*e), d2=(dia+2*e), d1=(dia-wid), $fn=global_fn); 
+                cylinder(h=(ht+2*e), d2=(od+2*e), d1=id, $fn=global_fn); 
             }
         }
 }
 
-module flip_chamfered_ring(pos=0,dia=10,wid=5,ht=5) {
+module flip_chamfered_ring(pos=0,od=10,id=5,ht=5) {
     translate(v=[0,0,pos+ht]) // offset by the height since we flipped it over
     rotate(a=180,v=[1,0,0])
-    chamfered_ring(pos=0,dia=dia,wid=wid,ht=ht,flip=false);
+    chamfered_ring(pos=0,od=od,id=id,ht=ht,flip=false);
 }
 
-module hollow_ring(pos=0, dia=10, wid=5, ht=5) { 
-    // color("blue")
+module hollow_ring(pos=0, od=10, id=5, ht=5) { 
     union() {
         translate(v = [0,0,pos]) {
             difference() {
                 $fn=global_fn;
-                cylinder(h=ht,d=dia);
+                cylinder(h=ht,d=od);
                 translate([0,0,-0.5]) {
-                    cylinder(h=(ht+1),d=(dia-wid));
+                    cylinder(h=(ht+1),d=id);
                 }
             }
         }
@@ -54,7 +53,6 @@ module hollow_ring(pos=0, dia=10, wid=5, ht=5) {
 }
 
 module hollow_cone(pos=0, top=51, bot=61, wid=2, ht=5) {  
-    // color("blue")
     union() {
         translate(v = [0,0,pos]) {
             difference() {
@@ -105,7 +103,7 @@ module e_mount_base(pos=23.5, clr=false) {
     union() {
         // cylinder inside mount hole
         color("red") 
-	    hollow_ring(pos=(3.9+pos),dia=43.4,wid=(43.4-id),ht=5);
+	    hollow_ring(pos=(3.9+pos),od=43.4,id=id,ht=5);
         // three mounting lugs
         color("orange") 
 	    union() {
@@ -121,7 +119,7 @@ module e_mount_base(pos=23.5, clr=false) {
         // main base plate
         color("green") 
         difference() {
-            hollow_ring(pos=(-1.04+pos),dia=61.5,wid=(61.5-id),ht=5);
+            hollow_ring(pos=(-1.04+pos),od=61.5,id=id,ht=5);
             // latch cutout
             hull() {
                 translate([24,-13,(3.5+pos)]) sphere(1.7,$fn=global_fn/e);
@@ -130,10 +128,10 @@ module e_mount_base(pos=23.5, clr=false) {
         }
         // inner rim on base plate
         color("olive") 
-	    hollow_ring(pos=(0.06+pos),dia=46.495,wid=(46.495-id),ht=5);
+	    hollow_ring(pos=(0.06+pos),od=46.495,id=id,ht=5);
         // outer rim on base plate
         color("blue") 
-	    hollow_ring(pos=(0+pos),dia=61.5,wid=1.9,ht=5);
+	    hollow_ring(pos=(0+pos),od=61.5,id=(61.5-1.9),ht=5);
         
         // index mark
         rotate(a=175, v=[0,0,1])
@@ -261,7 +259,7 @@ module whole_thing() {
             
             // body of the mount 
             color("tan") 
-            hollow_ring(pos=0,dia=51,wid=8.25,ht=25);
+            hollow_ring(pos=0,od=51,id=(51-8.25),ht=25);
             // a 'reducer' cone so we don't have to print support
             color("beige") 
             hollow_cone(pos=17.5,top=51,bot=60,wid=5,ht=5);
@@ -269,15 +267,15 @@ module whole_thing() {
             // the aperture flange
             color("orange")    
             difference() {
-                chamfered_ring(pos=6.0, dia=44, wid=7.25, ht=10);
+                chamfered_ring(pos=6.0, od=44, id=(44-7.25), ht=10);
                 // a cut-out to protect the threads
                 // from printing support for the flange
-                chamfered_ring(pos=6.,dia=44.1,wid=5,ht=4);
+                chamfered_ring(pos=6.0, od=44.1, id=(44.1-5), ht=4);
             }
             
             // angled join between mount and body - prints better than a ledge
             color("aqua")
-            chamfered_ring(pos=17.4, dia=44.25,wid=5,ht=5,flip=true);
+            chamfered_ring(pos=17.4, od=44.25, id=(44.25-5), ht=5, flip=true);
             
             // M42x1 threads
             color("orangered") 
