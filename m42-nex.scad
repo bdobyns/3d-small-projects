@@ -91,32 +91,40 @@ module mount_lug(pos=0, dia=46, wid=7, ht=2, ang=52, rot=0) {
 }
 
 
-module e_mount_base(pos=23.5) { 
+module e_mount_base(pos=23.5, clr=false) { 
     e=6;
+    id=39.4;
     union() {
-        // color("red") 
-	    hollow_ring(pos=27.4,dia=43.4,wid=4,ht=5);
-        // color("orange") 
+        // cylinder inside mount hole
+        color("red") 
+	    hollow_ring(pos=(3.9+pos),dia=43.4,wid=(43.4-id),ht=5);
+        // three mounting lugs
+        color("orange") 
 	    union() {
                 d=46.5; // outside diameter of the flange ear
                 p=(7.7+pos); // z-axis position of the flange ear
-                w=7.1; // width of the flange ear in the x-y plane
+                w=d-id; // width of the flange ear in the x-y plane
                 h=1.255; // z-height of the flange ear
                 mount_lug(pos=p,dia=d,wid=w,ht=h,ang=44,rot=0);
                 mount_lug(pos=p,dia=d,wid=w,ht=h,ang=52,rot=142);
                 mount_lug(pos=p,dia=d,wid=w,ht=h,ang=52,rot=(-101.5));
         }
-        // color("yellow") 
-	    hollow_ring(pos=(0.06+pos),dia=46.495,wid=7.1,ht=5);
+        
+        // main base plate
+        color("green") 
         difference() {
-            // color("green") 
-            hollow_ring(pos=(-1.04+pos),dia=61.5,wid=22.11,ht=5);
+            hollow_ring(pos=(-1.04+pos),dia=61.5,wid=(61.5-id),ht=5);
+            // latch cutout
             hull() {
-                translate([(0.5+pos),-13,27]) sphere(1.9,$fn=global_fn/e);
-                translate([(0+pos),-12.75,27]) sphere(1.9,$fn=global_fn/e);
+                translate([24,-13,(3.5+pos)]) sphere(1.7,$fn=global_fn/e);
+                translate([23.5,-12.75,(3.5+pos)]) sphere(1.7,$fn=global_fn/e);
             }
         }
-        // color("blue") 
+        // inner rim on base plate
+        color("olive") 
+	    hollow_ring(pos=(0.06+pos),dia=46.495,wid=(46.495-id),ht=5);
+        // outer rim on base plate
+        color("blue") 
 	    hollow_ring(pos=(0+pos),dia=61.5,wid=1.9,ht=5);
     }
 }
@@ -228,17 +236,17 @@ module whole_thing() {
             }
                 
             // body of the mount 
-            // color("tan") 
+            color("tan") 
             hollow_ring(pos=0,dia=51,wid=8.9,ht=25);
             // a 'reducer' cone so we don't have to print support
-            // color("beige") 
-            hollow_cone(pos=17.5,top=51,bot=61.5,wid=6,ht=5);
+            color("beige") 
+            hollow_cone(pos=17.5,top=51,bot=60,wid=5,ht=5);
             
             // reference design
             // color("yellow") m42_nex();
         
-            // color("orange") 
-            aperture_pin_flange(pos=6.85, dia=44, wid=11, ht=10);
+            color("orange") 
+            aperture_pin_flange(pos=6.85, dia=44, wid=7.25, ht=20);
             
             // M42x1 threads
             // color("orangered") 
@@ -248,6 +256,10 @@ module whole_thing() {
         // so it gets subtraced from both the body and the thread-ring
         grip_cutouts(pos=2,dia=55,wid=3.5,ht=15,cnt=15);
     }
+    
+    // reference measure for id of aperture flange
+    //color("pink")
+    //cylinder(h=25,d=36.72);
 }
 
 whole_thing();
