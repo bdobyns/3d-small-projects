@@ -3,6 +3,7 @@
 // v1 - grippy cutouts, vanity lettering
 // v2 - fine-tuned so that it can F6 render and produce an STL
 // v3 - airgap between threads and aperture flange so the support doesn't touch
+// v4 - refactored in terms of ID and OD, fixed up some bugs in index-mark
 
 // include <M42_Sony_NEX_E-Mount-Lens_Adaptor_fixed.scad>
 include <threads.scad>  // from http://dkprojects.net/openscad-threads/
@@ -18,7 +19,7 @@ include <threads.scad>  // from http://dkprojects.net/openscad-threads/
 global_fn=100;
 
 module chamfered_ring(pos=0, od=10, id=5, ht=5, flip=false) { // triangle cross section
-        e=0.5;
+        e=0.;
         if (flip) flip_chamfered_ring(pos=pos,od=od,id=id, ht=ht);
         else translate(v = [0,0,pos]) 
             difference() {
@@ -72,7 +73,7 @@ module hollow_cone(pos=0, od_top=51, od_bot=61, wid=2, ht=5, id_top=0, id_bot=0)
 
 
 
-module mount_lug(pos=0, dia=46, wid=7, ht=2, ang=52, rot=0) { 
+module mount_lug(pos=0, od=46, id=39.4, ht=2, ang=52, rot=0) { 
     rotate(a=rot, v=[0,0,1])
     union() {
         e=0.02;
@@ -80,19 +81,19 @@ module mount_lug(pos=0, dia=46, wid=7, ht=2, ang=52, rot=0) {
             difference() {
                 $fn=global_fn;
                 // make a disc
-                cylinder(h=ht,d=dia);
+                cylinder(h=ht,d=od);
                 // cutout in the disc makes a ring
-                translate([0,0,-0.5]) {
-                    cylinder(h=(ht+1),d=(dia-wid));
+                translate([0,0,-2*e]) {
+                    cylinder(h=(ht+4*e),d=id);
                 }
                 // clip off half of the ring
-                translate([0,(-dia/2),-e]){
-                    cube([dia,dia,ht+4*e]);
+                translate([0,(-od/2),-e]){
+                    cube([od,od,ht+4*e]);
                 }
                 // clip off all but the angle from the other side
                 rotate(a=(180-ang), v=[0,0,1]) {
-                    translate([0,(-dia/2),-e]){
-                        cube([dia,dia,ht+4*e]);
+                    translate([0,(-od/2),-e]){
+                        cube([od,od,ht+4*e]);
                     }
                 }
             }
@@ -107,53 +108,52 @@ module e_mount_base(pos=23.5, index=true) {
     union() {
         // cylinder inside mount hole
         color("red") 
-	    hollow_ring(pos=(3.9+pos),od=43.4,id=id,ht=5);
+	    hollow_ring(pos=(4.94+pos),od=43.4,id=id,ht=5);
         // three mounting lugs
         color("orange") 
 	    union() {
                 d=46.5; // outside diameter of the flange ear
-                p=(7.7+pos); // z-axis position of the flange ear
-                w=d-id; // width of the flange ear in the x-y plane
-                h=1.255; // z-height of the flange ear
-                mount_lug(pos=p,dia=d,wid=w,ht=h,ang=44,rot=0);
-                mount_lug(pos=p,dia=d,wid=w,ht=h,ang=52,rot=142);
-                mount_lug(pos=p,dia=d,wid=w,ht=h,ang=52,rot=(-101.5));
+                p=(8.74+pos); // z-axis position of the flange ear
+                h=1.255; // z-thickness of the flange ear
+                mount_lug(pos=p,od=d,id=id,ht=h,ang=44,rot=0);
+                mount_lug(pos=p,od=d,id=id,ht=h,ang=52,rot=142);
+                mount_lug(pos=p,od=d,id=id,ht=h,ang=52,rot=(-101.5));
         }
         
         // main base plate
         color("green") 
         difference() {
-            hollow_ring(pos=(-1.04+pos),od=61.5,id=id,ht=5);
+            hollow_ring(pos=pos,od=61.5,id=id,ht=5);
             // latch cutout
             hull() {
-                translate([24,-13,(3.5+pos)]) sphere(1.5,$fn=global_fn/e);
-                translate([22.25,-12,(3.5+pos)]) sphere(1.5,$fn=global_fn/e);
+                translate([24,-13,(4.54+pos)]) sphere(1.5,$fn=global_fn/e);
+                translate([22.25,-12,(4.54+pos)]) sphere(1.5,$fn=global_fn/e);
             }
         }
         // inner rim on base plate
         color("olive") 
-	    hollow_ring(pos=(0.06+pos),od=46.495,id=id,ht=5);
+	    hollow_ring(pos=(1.1+pos),od=46.495,id=id,ht=5);
         // outer rim on base plate
         color("blue") 
-	    hollow_ring(pos=(0+pos),od=61.5,id=59.6,ht=5);
+	    hollow_ring(pos=(1.09+pos),od=61.5,id=59.6,ht=5);
         
         if (index) {
-            // index mark that stands up
+            // index mark that stands up above base plate
             rotate(a=175, v=[0,0,1])
-            translate(v=[26,0,(-1.5+pos)])
+            translate(v=[26,0,(-0.46+pos)])
             cube(size=[5.25,2,5.46]);
         
             // index mark print support (no removable support needed)
             rotate(a=-83, v=[0,0,1])
             difference() {
-                hollow_cone(pos=(-6+pos), od_top=51, od_bot=62.5, wid=10, ht=4.5);
+                hollow_cone(pos=(-4.96+pos), od_top=51, od_bot=62.5, wid=10, ht=4.5);
                 translate(v=[30.6,0,0]) cube([70,70,70], center=true);
                 rotate(a=160.5,v=[0,0,1]) translate(v=[31,0,0]) cube([70,70,70], center=true);
             }
         } else {
             // index mark that's flush with the main base plate
             rotate(a=175, v=[0,0,1])
-            translate(v=[26,0,(-1.04+pos)])
+            translate(v=[26,0,pos])
             cube(size=[5.25,2,5]);
         }
             
@@ -244,14 +244,14 @@ module whole_thing() {
         union() {
             // The Sony NEX/E-Mount Base
             difference() {
-                e_mount_base(pos=23.5);
+                e_mount_base(pos=22.46);
                 // and some vanity text
                 vanity_text(pos=23.5,dia=64, ht=0.3);
             }
             
             // body of the mount 
             color("tan") 
-            hollow_ring(pos=0,od=51,id=(51-8.25),ht=25);
+            hollow_ring(pos=0,od=51,id=(42.75),ht=25);
             // a 'reducer' cone so we don't have to print support
             color("beige") 
             hollow_cone(pos=17.5,od_top=51,od_bot=60,wid=5,ht=5);
@@ -259,15 +259,15 @@ module whole_thing() {
             // the aperture flange
             color("orange")    
             difference() {
-                chamfered_ring(pos=6.0, od=44, id=(44-7.25), ht=10);
+                chamfered_ring(pos=6.0, od=44, id=36.4, ht=10);
                 // a cut-out to protect the threads
                 // from printing support for the flange
-                chamfered_ring(pos=6.0, od=44.1, id=(44.1-5), ht=4);
+                chamfered_ring(pos=6.0, od=44.1, id=39.1, ht=4);
             }
             
             // angled join between mount and body - prints better than a ledge
             color("aqua")
-            chamfered_ring(pos=17.4, od=44.25, id=(44.25-5), ht=5, flip=true);
+            chamfered_ring(pos=17.5, od=44.25, id=39.4, ht=5, flip=true);
             
             // M42x1 threads
             color("orangered") 
@@ -276,6 +276,9 @@ module whole_thing() {
         // subtract out the grip bits at the end from everything else
         // so it gets subtraced from both the body and the thread-ring
         grip_cutouts(pos=2,dia=51,wid=4,ht=14.25,cnt=20);
+        
+        // cutaway view
+        #translate(v=[-10,-10,-10]) cube(75,50,50);
     } 
 }
 
