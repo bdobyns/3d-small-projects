@@ -1,14 +1,16 @@
 // Barry A Dobyns, bdobyns@gmail.com, March 25 2015
 // v0 - first printing attempt
+//      threads from http://dkprojects.net/openscad-threads/
 // v1 - grippy cutouts, vanity lettering
 // v2 - fine-tuned so that it can F6 render and produce an STL
 // v3 - airgap between threads and aperture flange so the support doesn't touch
 // v4 - refactored in terms of ID and OD, fixed up some bugs in index-mark
 // v5 - refactored to print one mount "end", or to print in half-sections
-// v6 - refactored text to use Write.scad
+// v6 - refactored text to use Write.scad from Harlan Martin http://www.thingiverse.com/thing:16193/
+// v7 - refactored to use text_on from Brody Kenrick https://github.com/brodykenrick/text_on_OpenSCAD
 
 include <threads.scad>  // from http://dkprojects.net/openscad-threads/
-include <Write.scad>    // from http://www.thingiverse.com/thing:16193/
+include <text_on.scad>  // from https://github.com/brodykenrick/text_on_OpenSCAD
 
 // - height determined by flange distance
 // see http://www.graphics.cornell.edu/~westin/misc/mounts-by-register.html
@@ -206,8 +208,8 @@ module just_nex_mount(cutaway=false,pos=22.46, txt="NEX E-Mount",index=false) {
         // and some vanity text
          d=30.75;
          h=6;
-        writecylinder(txt,[0,0,pos+0.5],d,h,west=187);
-        writecylinder("by  Barry A. Dobyns",[0,0,pos+0.5],d,h,west=39);
+        text_on_cylinder(txt,[0,0,pos+0.5],d,h,west=187);
+        text_on_cylinder("by  Barry A. Dobyns",[0,0,pos+0.5],d,h,west=39);
         // vanity_text(pos=1,dia=64, ht=0.3);
         
         // cutaway view
