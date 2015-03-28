@@ -201,15 +201,16 @@ module just_m42_threads(cutaway=false, pos=pos) {
     };
 }
 
-module just_nex_mount(cutaway=false,pos=22.46, txt="NEX E-Mount",index=false) {
+module just_nex_mount(cutaway=false,pos=22.46, txt="SONY NEX",index=false) {
      // The Sony NEX/E-Mount Base
      difference() {
         e_mount_base(pos=pos, index=index);
         // and some vanity text
-         d=30.75;
+         r=30.75;
          h=6;
-        text_on_cylinder(txt,[0,0,pos+0.5],d,h,west=187);
-        text_on_cylinder("by  Barry A. Dobyns",[0,0,pos+0.5],d,h,west=39);
+         me="by  Barry A. Dobyns";
+        text_on_cylinder(t=txt,locn_vec=[0,0,pos+0.5],r=r,h=h,eastwest=176);
+        text_on_cylinder(t=me ,locn_vec=[0,0,pos+0.5],r=r,h=h,eastwest=-25);
         // vanity_text(pos=1,dia=64, ht=0.3);
         
         // cutaway view
