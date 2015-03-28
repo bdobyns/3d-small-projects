@@ -5,8 +5,10 @@
 // v3 - airgap between threads and aperture flange so the support doesn't touch
 // v4 - refactored in terms of ID and OD, fixed up some bugs in index-mark
 // v5 - refactored to print one mount "end", or to print in half-sections
+// v6 - refactored text to use Write.scad
 
 include <threads.scad>  // from http://dkprojects.net/openscad-threads/
+include <Write.scad>    // from http://www.thingiverse.com/thing:16193/
 
 // - height determined by flange distance
 // see http://www.graphics.cornell.edu/~westin/misc/mounts-by-register.html
@@ -188,68 +190,38 @@ module grip_cutouts(pos=3, dia=51, wid=3, ht=15, cnt=10) {
     for (rot = [0 : step : 360] ) {
         one_grip_cutout(pos=pos, dia=dia, wid=wid, ht=ht, rot=rot);
      }
+}  
+
+module just_m42_threads(cutaway=false, pos=pos) {
+    difference(){
+        whole_thing(mount=false,cutaway=cutaway);
+        translate(v=[0,0,11]) cylinder(h=100,d=100);
+    };
 }
 
-
-module radial_letter(ht=1,pos=31,dia=62,ch="X",rot=0) {
-    ft = "Liberation Sans";
-    rotate(a=rot+150, v=[0,0,1]) // this moves it to the right angular position
-    translate(v=[0,-dia/2,pos]) // move to right radial/vertical position
-    rotate(a=90, v=[1,0,0]) // move text to vertical in xz plane
-    translate(v=[0,0,-1.5]) // correct for height of text
-    linear_extrude(height=ht)
-    text(ch, font = ft, size = 3.75);
+module just_nex_mount(cutaway=false,pos=22.46, txt="NEX E-Mount",index=false) {
+     // The Sony NEX/E-Mount Base
+     difference() {
+        e_mount_base(pos=pos, index=index);
+        // and some vanity text
+         d=30.75;
+         h=6;
+        writecylinder(txt,[0,0,pos+0.5],d,h,west=187);
+        writecylinder("by  Barry A. Dobyns",[0,0,pos+0.5],d,h,west=39);
+        // vanity_text(pos=1,dia=64, ht=0.3);
+        
+        // cutaway view
+        if (cutaway) translate(v=[-10,-10,-10]) cube(75,50,50);
+     } 
 }
-
-module vanity_text(pos=31,dia=62, ht=1, name=true) {
-    // really want substr()
-    p = pos;
-    d = dia;
-    a = 7; // nominal width of a letter position
-
-    radial_letter(ht=ht,pos=p,dia=d,ch="M",rot=a*0);  
-    radial_letter(ht=ht,pos=p,dia=d,ch="4",rot=a*1+1.5);  // manual kerning
-    radial_letter(ht=ht,pos=p,dia=d,ch="2",rot=a*2);   
-    radial_letter(ht=ht,pos=p,dia=d,ch="-",rot=a*3);
-    radial_letter(ht=ht,pos=p,dia=d,ch="-",rot=a*3+2);   // an em-dash
-    radial_letter(ht=ht,pos=p,dia=d,ch="N",rot=a*4);   
-    radial_letter(ht=ht,pos=p,dia=d,ch="E",rot=a*5);   
-    radial_letter(ht=ht,pos=p,dia=d,ch="X",rot=a*6);   
-
-    if (name) {
-        e=125;
- //     radial_letter(ht=ht,pos=p,dia=d,ch=" ",rot=e+a*1);   
-        radial_letter(ht=ht,pos=p,dia=d,ch="b",rot=e+a*0);   
-        radial_letter(ht=ht,pos=p,dia=d,ch="y",rot=e+a*1-1);   
- //     radial_letter(ht=ht,pos=p,dia=d,ch=" ",rot=e+a*2);   
-        radial_letter(ht=ht,pos=p,dia=d,ch="B",rot=e+a*3);   
-        radial_letter(ht=ht,pos=p,dia=d,ch="a",rot=e+a*4);   
-        radial_letter(ht=ht,pos=p,dia=d,ch="r",rot=e+a*5-1);   // kerning
-        radial_letter(ht=ht,pos=p,dia=d,ch="r",rot=e+a*6-4);   
-        radial_letter(ht=ht,pos=p,dia=d,ch="y",rot=e+a*6);   
- //     radial_letter(ht=ht,pos=p,dia=d,ch=" ",rot=e+a*7);   
-        radial_letter(ht=ht,pos=p,dia=d,ch="A",rot=e+a*8-5);   
-        radial_letter(ht=ht,pos=p,dia=d,ch=".",rot=e+a*8+2);   
-        radial_letter(ht=ht,pos=p,dia=d,ch="D",rot=e+a*9);   
-        radial_letter(ht=ht,pos=p,dia=d,ch="o",rot=e+a*10+1);   
-        radial_letter(ht=ht,pos=p,dia=d,ch="b",rot=e+a*11);   
-        radial_letter(ht=ht,pos=p,dia=d,ch="y",rot=e+a*12-1);   
-        radial_letter(ht=ht,pos=p,dia=d,ch="n",rot=e+a*13-3);   
-        radial_letter(ht=ht,pos=p,dia=d,ch="s",rot=e+a*14-4);
-    }   
-}   
 
 module whole_thing(mount=true, cutaway=false) {
     difference() {
         union() {
             if(mount) {
                 // The Sony NEX/E-Mount Base
-                difference() {
-                    e_mount_base(pos=22.46);
-                    // and some vanity text
-                    vanity_text(pos=23.5,dia=64, ht=0.3);
-                }
-                
+                just_nex_mount(pos=22.46,txt="M42-NEX",index=true);
+
                 // angled join between mount and body - prints better than a ledge
                 color("aqua")
                 chamfered_ring(pos=17.5, od=44.25, id=39.4, ht=5, flip=true);
@@ -271,9 +243,12 @@ module whole_thing(mount=true, cutaway=false) {
                 // from printing support for the flange
                 chamfered_ring(pos=5.98, od=44.1, id=39.4, ht=4);
             }
+            
+            if(false) {
             // faux-support - protect the threads
             hollow_ring(pos=0, od=39.4, id=38.4, ht=5.75);
             hollow_ring(pos=0, od=39.4, id=39.38, ht=6);
+            }
             
             // M42x1 threads
             color("orangered") 
@@ -288,24 +263,6 @@ module whole_thing(mount=true, cutaway=false) {
     } 
 }
 
-module just_m42_threads(cutaway=false) {
-    difference(){
-        whole_thing(mount=false,cutaway=cutaway);
-        translate(v=[0,0,11]) cylinder(h=100,d=100);
-    };
-}
-
-module just_nex_mount(cutaway=false) {
-     // The Sony NEX/E-Mount Base
-     difference() {
-        e_mount_base(pos=0, index=false);
-        // and some vanity text
-        vanity_text(pos=1,dia=64, ht=0.3);
-        
-        // cutaway view
-        if (cutaway) translate(v=[-10,-10,-10]) cube(75,50,50);
-     } 
-}
 
 module just_right_half() {
     difference() {
@@ -325,11 +282,10 @@ module just_left_half() {
 
 //-------------------------------------------------------------------------------//
 
-//whole_thing(cutaway=true);
+whole_thing(cutaway=false);
 
-//translate(v=[ 40, 40,0]) just_nex_mount(cutaway=true);
+//translate(v=[ 40, 40,0]) just_nex_mount(cutaway=false,pos=0,index=false);
 //translate(v=[-40,-40,0]) just_m42_threads(cutaway=true);
 
-//translate(v=[0,-10,0]) 
-just_right_half();
+//translate(v=[0,-10,0]) just_right_half();
 //translate(v=[0, 10,0]) just_left_half();
