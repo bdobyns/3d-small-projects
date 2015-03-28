@@ -19,7 +19,7 @@ include <threads.scad>  // from http://dkprojects.net/openscad-threads/
 global_fn=100;
 
 module chamfered_ring(pos=0, od=10, id=5, ht=5, flip=false) { // triangle cross section
-        e=0.;
+        e=0.2;
         if (flip) flip_chamfered_ring(pos=pos,od=od,id=id, ht=ht);
         else translate(v = [0,0,pos]) 
             difference() {
@@ -243,12 +243,16 @@ module whole_thing(mount=true) {
     difference() {
         union() {
             if(mount) {
-              // The Sony NEX/E-Mount Base
-              difference() {
-                e_mount_base(pos=22.46);
-                // and some vanity text
-                vanity_text(pos=23.5,dia=64, ht=0.3);
+                // The Sony NEX/E-Mount Base
+                difference() {
+                    e_mount_base(pos=22.46);
+                    // and some vanity text
+                    vanity_text(pos=23.5,dia=64, ht=0.3);
                 }
+                
+                // angled join between mount and body - prints better than a ledge
+                color("aqua")
+                chamfered_ring(pos=17.5, od=44.25, id=39.4, ht=5, flip=true
             }
             
             // body of the mount 
@@ -264,12 +268,8 @@ module whole_thing(mount=true) {
                 chamfered_ring(pos=6.0, od=44, id=36.4, ht=10);
                 // a cut-out to protect the threads
                 // from printing support for the flange
-                chamfered_ring(pos=6.0, od=44.1, id=39.1, ht=4);
+                chamfered_ring(pos=5.98, od=44.1, id=39.4, ht=4);
             }
-            
-            // angled join between mount and body - prints better than a ledge
-            color("aqua")
-            chamfered_ring(pos=17.5, od=44.25, id=39.4, ht=5, flip=true);
             
             // M42x1 threads
             color("orangered") 
@@ -280,13 +280,15 @@ module whole_thing(mount=true) {
         grip_cutouts(pos=2,dia=51,wid=4,ht=14.25,cnt=20);
         
         // cutaway view
-        // #translate(v=[-10,-10,-10]) cube(75,50,50);
+        translate(v=[-10,-10,-10]) cube(75,50,50);
     } 
 }
 
 module just_m42_threads() {
-    whole_thing(mount=false);
-    translate(v=[0,0,10]) cylinder(h=100,d=100);
+    difference(){
+        whole_thing(mount=false);
+        translate(v=[0,0,11]) cylinder(h=100,d=100);
+    }
 }
 
 module just_nex_mount() {
@@ -298,4 +300,6 @@ module just_nex_mount() {
             }    
 }
 
-whole_thing();
+//whole_thing();
+//just_nex_mount();
+just_m42_threads();
