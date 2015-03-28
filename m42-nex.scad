@@ -278,8 +278,22 @@ module whole_thing() {
         grip_cutouts(pos=2,dia=51,wid=4,ht=14.25,cnt=20);
         
         // cutaway view
-        #translate(v=[-10,-10,-10]) cube(75,50,50);
+        // #translate(v=[-10,-10,-10]) cube(75,50,50);
     } 
+}
+
+module just_m42_threads() {
+    whole_thing();
+    translate(v=[0,0,10]) cylinder(h=100,d=100);
+}
+
+module just_nex_mount() {
+            // The Sony NEX/E-Mount Base
+            difference() {
+                e_mount_base(pos=0, index=false);
+                // and some vanity text
+                vanity_text(pos=1,dia=64, ht=0.3);
+            }    
 }
 
 whole_thing();
