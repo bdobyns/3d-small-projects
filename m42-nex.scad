@@ -239,14 +239,16 @@ module vanity_text(pos=31,dia=62, ht=1, name=true) {
     }   
 }   
 
-module whole_thing() {
+module whole_thing(mount=true) {
     difference() {
         union() {
-            // The Sony NEX/E-Mount Base
-            difference() {
+            if(mount) {
+              // The Sony NEX/E-Mount Base
+              difference() {
                 e_mount_base(pos=22.46);
                 // and some vanity text
                 vanity_text(pos=23.5,dia=64, ht=0.3);
+                }
             }
             
             // body of the mount 
@@ -283,7 +285,7 @@ module whole_thing() {
 }
 
 module just_m42_threads() {
-    whole_thing();
+    whole_thing(mount=false);
     translate(v=[0,0,10]) cylinder(h=100,d=100);
 }
 
