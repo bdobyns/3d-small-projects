@@ -254,7 +254,7 @@ module whole_thing() {
             hollow_ring(pos=0,od=51,id=(42.75),ht=25);
             // a 'reducer' cone so we don't have to print support
             color("beige") 
-            hollow_cone(pos=17.5,od_top=51,od_bot=60,wid=5,ht=5);
+            hollow_cone(pos=17.5,od_top=51,od_bot=60,id_top=43,id_bot=43,ht=5);
             
             // the aperture flange
             color("orange")    
