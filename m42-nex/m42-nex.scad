@@ -20,7 +20,27 @@ include <text_on.scad>  // from https://github.com/brodykenrick/text_on_OpenSCAD
 // http://www.openscad.org/cheatsheet/
 // http://edutechwiki.unige.ch/en/OpenScad_beginners_tutorial
 
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////Parameters//////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
 global_fn=100;
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////Renders/////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+
+whole_thing(cutaway=false);
+
+//translate(v=[ 40, 40,0]) complete_nex_mount(cutaway=false,pos=0,index=false);
+//translate(v=[-40,-40,0]) just_m42_threads(cutaway=true);
+
+//translate(v=[0,-10,0]) just_right_half();
+//translate(v=[0, 10,0]) just_left_half();
+
+//////////////////////////////////////////////////////////////////////
+//////////////////////////////Modules/////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 
 module chamfered_ring(pos=0, od=10, id=5, ht=5, flip=false) { // triangle cross section
         e=0.2;
@@ -194,14 +214,7 @@ module grip_cutouts(pos=3, dia=51, wid=3, ht=15, cnt=10) {
      }
 }  
 
-module just_m42_threads(cutaway=false, pos=pos) {
-    difference(){
-        whole_thing(mount=false,cutaway=cutaway);
-        translate(v=[0,0,11]) cylinder(h=100,d=100);
-    };
-}
-
-module just_nex_mount(cutaway=false,pos=22.46, txt="SONY NEX",index=false) {
+module complete_nex_mount(cutaway=false,pos=22.46, txt="SONY NEX",index=false) {
      // The Sony NEX/E-Mount Base
      difference() {
         e_mount_base(pos=pos, index=index);
@@ -223,7 +236,7 @@ module whole_thing(mount=true, cutaway=false) {
         union() {
             if(mount) {
                 // The Sony NEX/E-Mount Base
-                just_nex_mount(pos=22.46,txt="M42-NEX",index=true);
+                complete_nex_mount(pos=22.46,txt="M42-NEX",index=true);
 
                 // angled join between mount and body - prints better than a ledge
                 color("aqua")
@@ -267,6 +280,13 @@ module whole_thing(mount=true, cutaway=false) {
 }
 
 
+module just_m42_threads(cutaway=false, pos=pos) {
+    difference(){
+        whole_thing(mount=false,cutaway=cutaway);
+        translate(v=[0,0,11]) cylinder(h=100,d=100);
+    };
+}
+
 module just_right_half() {
     difference() {
         siz=75;
@@ -283,12 +303,3 @@ module just_left_half() {
     }
 }
 
-//-------------------------------------------------------------------------------//
-
-whole_thing(cutaway=false);
-
-//translate(v=[ 40, 40,0]) just_nex_mount(cutaway=false,pos=0,index=false);
-//translate(v=[-40,-40,0]) just_m42_threads(cutaway=true);
-
-//translate(v=[0,-10,0]) just_right_half();
-//translate(v=[0, 10,0]) just_left_half();
