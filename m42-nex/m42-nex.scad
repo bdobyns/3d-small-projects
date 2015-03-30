@@ -4,10 +4,11 @@
 // v1 - grippy cutouts, vanity lettering
 // v2 - fine-tuned so that it can F6 render and produce an STL
 // v3 - airgap between threads and aperture flange so the support doesn't touch
-// v4 - refactored in terms of ID and OD, fixed up some bugs in index-mark
+// v4 - refactored in terms of ID and OD, fixed up some bugs in index-mark (printed)
 // v5 - refactored to print one mount "end", or to print in half-sections
 // v6 - refactored text to use Write.scad from Harlan Martin http://www.thingiverse.com/thing:16193/
 // v7 - refactored to use text_on from Brody Kenrick https://github.com/brodykenrick/text_on_OpenSCAD
+// v8 - bigbody alternative, as suggested by will
 
 include <threads.scad>  // from http://dkprojects.net/openscad-threads/
 include <text_on.scad>  // from https://github.com/brodykenrick/text_on_OpenSCAD
@@ -25,15 +26,17 @@ include <text_on.scad>  // from https://github.com/brodykenrick/text_on_OpenSCAD
 //////////////////////////////////////////////////////////////////////
 
 global_fn=100;
+mount_dia=61.5;  // nominal 61.5 is correct
+body_dia=61.5;   // 61.5 is the dia of the mount, 51.0 is the nominal minimimum dia
 
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////Renders/////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-whole_thing(cutaway=false);
+//whole_thing(cutaway=false, body_dia=body_dia);
 
 //translate(v=[ 40, 40,0]) complete_nex_mount(cutaway=false,pos=0,index=false);
-//translate(v=[-40,-40,0]) just_m42_threads(cutaway=true);
+translate(v=[-40,-40,0]) just_m42_threads(cutaway=false);
 
 //translate(v=[0,-10,0]) just_right_half();
 //translate(v=[0, 10,0]) just_left_half();
@@ -147,7 +150,7 @@ module e_mount_base(pos=23.5, index=true) {
         // main base plate
         color("green") 
         difference() {
-            hollow_ring(pos=pos,od=61.5,id=id,ht=5);
+            hollow_ring(pos=pos,od=mount_dia,id=id,ht=5);
             // latch cutout
             hull() {
                 translate([24,-13,(4.54+pos)]) sphere(1.5,$fn=global_fn/e);
@@ -159,13 +162,13 @@ module e_mount_base(pos=23.5, index=true) {
 	    hollow_ring(pos=(1.1+pos),od=46.495,id=id,ht=5);
         // outer rim on base plate
         color("blue") 
-	    hollow_ring(pos=(1.09+pos),od=61.5,id=59.6,ht=5);
+	    hollow_ring(pos=(1.09+pos),od=mount_dia,id=59.6,ht=5);
         
         if (index) {
             // index mark that stands up above base plate
             rotate(a=175, v=[0,0,1])
             translate(v=[26,0,(-0.46+pos)])
-            cube(size=[5.25,2,5.46]);
+            cube(size=[5.75,2,5.46]);
         
             // index mark print support (no removable support needed)
             rotate(a=-83, v=[0,0,1])
@@ -232,7 +235,7 @@ module complete_nex_mount(cutaway=false,pos=22.46, txt="SONY NEX",index=false) {
 }
 
 module whole_thing(mount=true, cutaway=false) {
-    difference() {
+        difference() {
         union() {
             if(mount) {
                 // The Sony NEX/E-Mount Base
@@ -245,11 +248,19 @@ module whole_thing(mount=true, cutaway=false) {
             
             // body of the mount 
             color("tan") 
-            hollow_ring(pos=0,od=51,id=(42.75),ht=25);
-            // a 'reducer' cone so we don't have to print support
-            color("beige") 
-            hollow_cone(pos=17.5,od_top=51,od_bot=60,id_top=43,id_bot=43,ht=5);
-
+            hollow_ring(pos=0,od=body_dia,id=(42.75),ht=22.46);
+            // a 'reducer' cone so we don't have to print support            
+            if(body_dia < mount_dia) {
+                color("beige") 
+                hollow_cone(pos=17.5,od_top=body_dia,od_bot=mount_dia,id_top=43,id_bot=43,ht=5);
+            }
+            // maybe run the index mark all the way to the top, if wide-body
+            if (body_dia==mount_dia) {
+                rotate(a=175, v=[0,0,1])
+                translate(v=[body_dia/2,0,0])
+                // rotate(a=45,v=[0,0,1])
+                cube(size=[1,2,22.46]);
+            }
             
             // the aperture flange
             color("orange")    
@@ -272,13 +283,12 @@ module whole_thing(mount=true, cutaway=false) {
         }
         // subtract out the grip bits at the end from everything else
         // so it gets subtraced from both the body and the thread-ring
-        grip_cutouts(pos=2,dia=51,wid=4,ht=14.25,cnt=20);
+        grip_cutouts(pos=2,dia=body_dia,wid=4,ht=14.25,cnt=19);
         
         // cutaway view
         if (cutaway) translate(v=[-10,-10,-10]) cube(75,50,50);
     } 
 }
-
 
 module just_m42_threads(cutaway=false, pos=pos) {
     difference(){
