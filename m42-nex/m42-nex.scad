@@ -181,7 +181,7 @@ module e_mount_base(pos=23.5, index=true) {
             // index mark that's flush with the main base plate
             rotate(a=175, v=[0,0,1])
             translate(v=[26,0,pos])
-            cube(size=[5.25,2,5]);
+            cube(size=[5.75,2,5]);
         }
             
     }
