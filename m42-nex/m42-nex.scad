@@ -36,7 +36,8 @@ body_dia=61.5;   // 61.5 is the dia of the mount, 51.0 is the nominal minimimum 
 //whole_thing(cutaway=false, body_dia=body_dia);
 
 //translate(v=[ 40, 40,0]) complete_nex_mount(cutaway=false,pos=0,index=false);
-translate(v=[-40,-40,0]) just_m42_threads(cutaway=false);
+//translate(v=[-40,-40,0]) 
+just_m42_threads(cutaway=false);
 
 //translate(v=[0,-10,0]) just_right_half();
 //translate(v=[0, 10,0]) just_left_half();
@@ -283,6 +284,7 @@ module whole_thing(mount=true, cutaway=false) {
         }
         // subtract out the grip bits at the end from everything else
         // so it gets subtraced from both the body and the thread-ring
+        rotate(a=15.75, v=[0,0,1])  // avoid the index mark
         grip_cutouts(pos=2,dia=body_dia,wid=4,ht=14.25,cnt=19);
         
         // cutaway view
