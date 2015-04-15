@@ -1,7 +1,7 @@
 // Barry A Dobyns, bdobyns@gmail.com, March 25 2015
 // v0 - first printing attempt
 //      threads from http://dkprojects.net/openscad-threads/
-// v1 - grippy cutouts, vanity lettering
+// v1 - grippy cutouts, DIY vanity lettering
 // v2 - fine-tuned so that it can F6 render and produce an STL
 // v3 - airgap between threads and aperture flange so the support doesn't touch
 // v4 - refactored in terms of ID and OD, fixed up some bugs in index-mark (printed)
@@ -33,11 +33,10 @@ body_dia=61.5;   // 61.5 is the dia of the mount, 51.0 is the nominal minimimum 
 //////////////////////////////Renders/////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-//whole_thing(cutaway=false, body_dia=body_dia);
+whole_thing(cutaway=false, body_dia=61.5);
 
 //translate(v=[ 40, 40,0]) complete_nex_mount(cutaway=false,pos=0,index=false);
-//translate(v=[-40,-40,0]) 
-just_m42_threads(cutaway=false);
+//translate(v=[-40,-40,0]) just_m42_threads(cutaway=false);
 
 //translate(v=[0,-10,0]) just_right_half();
 //translate(v=[0, 10,0]) just_left_half();
