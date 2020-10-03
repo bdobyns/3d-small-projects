@@ -13,7 +13,8 @@ global_fn=90;
 
 talenti_lid();
 // this gets the mount in from someone else's designed file
-translate([31,31,1.95]) color("blue") import("m43capV2.stl");
+translate([31,31,1.95]) color("blue") 
+    import("mounts/m43capV2.stl");
 
 // first the talenti icecream lid
 // nominal measured height=13, diameter=90, threadpitch=4.9, wallthickness=1.8

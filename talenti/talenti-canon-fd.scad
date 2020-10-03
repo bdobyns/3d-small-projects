@@ -14,7 +14,7 @@ global_fn=90;
 talenti_lid();
 // this gets the mount in from someone else's designed file
 rotate([0,180,0]) translate([0,0,-17.81]) color("blue") 
-    import("Canon_FD_Lenscap_V2.stl");
+    import("mounts/Canon_FD_Lenscap_V2.stl");
 
 // first the talenti icecream lid
 // nominal measured height=13, diameter=90, threadpitch=4.9, wallthickness=1.8

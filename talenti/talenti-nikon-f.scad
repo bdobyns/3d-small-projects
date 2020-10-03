@@ -13,7 +13,8 @@ global_fn=90;
 
 talenti_lid();
 // this gets the mount in from someone else's designed file
-translate([0,0,2.4]) color("blue") import("nikon-fmount-plain.stl");
+translate([0,0,2.4]) color("blue") 
+    import("mounts/nikon-fmount-plain.stl");
 
 // first the talenti icecream lid
 // nominal measured height=13, diameter=90, threadpitch=4.9, wallthickness=1.8

@@ -13,13 +13,13 @@ global_fn=90;
 
 talenti_lid();
 // this gets the mount in from someone else's designed file
-translate([0,0,0.1]) 
-    color("red") import("minolta_md_CE5_rear_lenscap.stl");
+translate([0,0,0.1]) color("red") 
+    import("mounts/minolta_md_CE5_rear_lenscap.stl");
 // this next bit gets the script in bottom of the cap
 // which is on the outside of the cap, so we flip it over
 // and cut off the mount part to leave just the script 
 translate([0,0,4.5]) rotate([180,0,180]) difference() {
-    color("tan") import("minolta_md_CE5_rear_lenscap.stl");
+    color("tan") import("mounts/minolta_md_CE5_rear_lenscap.stl");
     hollow_ring(pos=-1,ht=25,od=65,id=43);
     translate([0,0,2]) cylinder(h=20,d=65);
 }
