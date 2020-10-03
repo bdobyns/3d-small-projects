@@ -5,16 +5,21 @@ include <threads.scad>  // from http://dkprojects.net/openscad-threads/
 include <text_on.scad>  // from https://github.com/brodykenrick/text_on_OpenSCAD
 
 label="Nikon F-Mount";
-label2="Nikkor 55mm f1.2";
-label3="Property of:";
+label2=""; // "Nikkor 55mm f1.2";
+label3=""; // "Property of:";
 label4="Barry A Dobyns";
 label5="408-981-4746";
 global_fn=90;
 
 talenti_lid();
+
 // this gets the mount in from someone else's designed file
-translate([0,0,2.4]) color("blue") 
-    import("mounts/nikon-fmount-plain.stl");
+union() {
+    translate([0,0,2.4]) color("blue") 
+        import("mounts/nikon-fmount-plain.stl");
+    // this ring does away with the absurd texturing
+    color("red") hollow_ring(pos=1,od=56,id=48,ht=17);
+}
 
 // first the talenti icecream lid
 // nominal measured height=13, diameter=90, threadpitch=4.9, wallthickness=1.8
