@@ -4,7 +4,7 @@
 include <threads.scad>  // from http://dkprojects.net/openscad-threads/
 include <text_on.scad>  // from https://github.com/brodykenrick/text_on_OpenSCAD
 
-label="Sony E-Mount";
+label="Canon FD Mount";
 label2=""; // "Nikkor 55mm f1.2";
 label3=""; // "Property of:";
 label4="Barry A Dobyns";
@@ -13,7 +13,8 @@ global_fn=90;
 
 talenti_lid();
 // this gets the mount in from someone else's designed file
-translate([-31,-31,0.46]) color("blue") import("E-mount_rear_lenscap.STL");
+rotate([0,180,0]) translate([0,0,-17.81]) color("blue") 
+    import("Canon_FD_Lenscap_V2.stl");
 
 // first the talenti icecream lid
 // nominal measured height=13, diameter=90, threadpitch=4.9, wallthickness=1.8
@@ -38,7 +39,7 @@ module talenti_lid(height=20, diameter=90, threadpitch=4.9, wallthickness=3) {
         
         // grippy bits on the rim
         grip_cutouts(pos=wallthickness/3, dia=outer+1.5, wid=3, 
-                ht=height-wallthickness, cnt=100, arc=250);
+                ht=height-wallthickness, cnt=100, arc=240);
         
         // text on the inside
         /* text_on_cube(cube_size=[diameter,diameter,1.5], t=label,

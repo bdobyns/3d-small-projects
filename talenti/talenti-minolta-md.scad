@@ -4,7 +4,7 @@
 include <threads.scad>  // from http://dkprojects.net/openscad-threads/
 include <text_on.scad>  // from https://github.com/brodykenrick/text_on_OpenSCAD
 
-label="Pentax K-Mount";
+label="Minolta MD-Mount";
 label2=""; // "Nikkor 55mm f1.2";
 label3=""; // "Property of:";
 label4="Barry A Dobyns";
@@ -13,16 +13,23 @@ global_fn=90;
 
 talenti_lid();
 // this gets the mount in from someone else's designed file
-translate([-31,-31,0.5]) color("blue") import("PK-mount_rear_lenscap.STL");
+translate([0,0,0.1]) 
+    color("red") import("minolta_md_CE5_rear_lenscap.stl");
+// this next bit gets the script in bottom of the cap
+// which is on the outside of the cap, so we flip it over
+// and cut off the mount part to leave just the script 
+translate([0,0,4.5]) rotate([180,0,180]) difference() {
+    color("tan") import("minolta_md_CE5_rear_lenscap.stl");
+    hollow_ring(pos=-1,ht=25,od=65,id=43);
+    translate([0,0,2]) cylinder(h=20,d=65);
+}
 
 // first the talenti icecream lid
 // nominal measured height=13, diameter=90, threadpitch=4.9, wallthickness=1.8
 module talenti_lid(height=20, diameter=90, threadpitch=4.9, wallthickness=3) {
     outer=diameter+(wallthickness*2);
         
-
-    
-    // do the wall
+    // do the outer wall
     difference(){
         union() {
             // do the flat bottom plate
