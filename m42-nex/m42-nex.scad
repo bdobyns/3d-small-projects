@@ -9,6 +9,7 @@
 // v6 - refactored text to use Write.scad from Harlan Martin http://www.thingiverse.com/thing:16193/
 // v7 - refactored to use text_on from Brody Kenrick https://github.com/brodykenrick/text_on_OpenSCAD
 // v8 - bigbody alternative, as suggested by will
+// v9 - threads are a separate piece
 
 include <threads.scad>  // from http://dkprojects.net/openscad-threads/
 include <text_on.scad>  // from https://github.com/brodykenrick/text_on_OpenSCAD
@@ -33,7 +34,9 @@ body_dia=61.5;   // 61.5 is the dia of the mount, 51.0 is the nominal minimimum 
 //////////////////////////////Renders/////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-whole_thing(cutaway=false, body_dia=61.5);
+//translate(v=[-40,-40,0]) 
+threaded_insert();
+//translate(v=[ 40, 40,0]) whole_thing(cutaway=false, threads=false, body_dia=61.5);
 
 //translate(v=[ 40, 40,0]) complete_nex_mount(cutaway=false,pos=0,index=false);
 //translate(v=[-40,-40,0]) just_m42_threads(cutaway=false);
@@ -234,7 +237,7 @@ module complete_nex_mount(cutaway=false,pos=22.46, txt="SONY NEX",index=false) {
      } 
 }
 
-module whole_thing(mount=true, cutaway=false) {
+module whole_thing(mount=true, threads=true, cutaway=false) {
         difference() {
         union() {
             if(mount) {
@@ -248,7 +251,12 @@ module whole_thing(mount=true, cutaway=false) {
             
             // body of the mount 
             color("tan") 
-            hollow_ring(pos=0,od=body_dia,id=(42.75),ht=22.46);
+            if (threads==true) {
+                hollow_ring(pos=0,od=body_dia,id=(42),ht=22.46);
+            } else {
+                hollow_ring(pos=0,od=body_dia,id=(50),ht=22.46);
+                hollow_ring(pos=10,od=55,id=49,ht=2);
+            }
             // a 'reducer' cone so we don't have to print support            
             if(body_dia < mount_dia) {
                 color("beige") 
@@ -262,24 +270,19 @@ module whole_thing(mount=true, cutaway=false) {
                 cube(size=[1,2,22.46]);
             }
             
-            // the aperture flange
-            color("orange")    
-            difference() {
-                chamfered_ring(pos=6.0, od=44, id=36.4, ht=10);
-                // a cut-out to protect the threads
-                // from printing support for the flange
-                chamfered_ring(pos=5.98, od=44.1, id=39.4, ht=4);
-            }
+            if (threads == true) {
+                // the aperture flange
+                difference() {
+                    chamfered_ring(pos=6.0, od=44, id=36.4, ht=10);
+                    // a cut-out to protect the threads
+                    // from printing support for the flange
+                    chamfered_ring(pos=5.98, od=44.1, id=39.4, ht=4);
+                }
             
-            if(false) {
-            // faux-support - protect the threads
-            hollow_ring(pos=0, od=39.4, id=38.4, ht=5.75);
-            hollow_ring(pos=0, od=39.4, id=39.38, ht=6);
+                // M42x1 threads
+                color("orangered") 
+                inside_threaded_ring(pos=0.5,ht=5,dia=50,thread=42.25,pitch=1,rot=180);
             }
-            
-            // M42x1 threads
-            color("orangered") 
-            inside_threaded_ring(pos=1.25,ht=4.25,dia=50,thread=42.25,pitch=1,rot=180);
         }
         // subtract out the grip bits at the end from everything else
         // so it gets subtraced from both the body and the thread-ring
@@ -289,6 +292,16 @@ module whole_thing(mount=true, cutaway=false) {
         // cutaway view
         if (cutaway) translate(v=[-10,-10,-10]) cube(75,50,50);
     } 
+}
+
+module threaded_insert() {
+    rotate(a=180,v=[1,0,0])
+    translate(v=[0,0,-10])
+    union() {
+        color("red") hollow_ring(pos=0,od=49.9,ht=10,id=44);
+        color("blue") inside_threaded_ring(pos=0.01,ht=5,dia=49.75,thread=42.25,pitch=1,rot=180);
+        chamfered_ring(pos=6.0, od=44, id=36.4, ht=3.9);
+    }
 }
 
 module just_m42_threads(cutaway=false, pos=pos) {
