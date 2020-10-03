@@ -13,16 +13,18 @@ global_fn=90;
 
 talenti_lid();
 // this gets the mount in from someone else's designed file
-translate([31,31,1.95]) color("blue") 
-    import("mounts/m43capV2.stl");
+union() {
+    translate([30.1,30.1,1.95]) color("blue") 
+        import("mounts/m43capV2.stl");
+    // this ring does away with the absurd texturing
+    color("red") hollow_ring(pos=1,od=57,id=44,ht=10.85);
+}
 
 // first the talenti icecream lid
 // nominal measured height=13, diameter=90, threadpitch=4.9, wallthickness=1.8
 module talenti_lid(height=20, diameter=90, threadpitch=4.9, wallthickness=3) {
     outer=diameter+(wallthickness*2);
-        
-
-    
+ 
     // do the wall
     difference(){
         union() {
