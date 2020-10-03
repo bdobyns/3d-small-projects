@@ -18,15 +18,13 @@ union() {
     translate([0,0,2.4]) color("blue") 
         import("mounts/nikon-fmount-plain.stl");
     // this ring does away with the absurd texturing
-    color("red") hollow_ring(pos=1,od=56,id=48,ht=17);
+    color("red") hollow_ring(pos=1,od=56.5,id=48,ht=17.3);
 }
 
 // first the talenti icecream lid
 // nominal measured height=13, diameter=90, threadpitch=4.9, wallthickness=1.8
 module talenti_lid(height=20, diameter=90, threadpitch=4.9, wallthickness=3) {
     outer=diameter+(wallthickness*2);
-        
-
     
     // do the wall
     difference(){
