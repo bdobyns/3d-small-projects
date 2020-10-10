@@ -15,7 +15,9 @@ global_fn=90;
 
 module jar_lid(height=20, diameter=90, threadpitch=4.9, wallthickness=3,
     label1="", label2="", label3="", label4="", label5="",
-    rim_grip_arc=230, rim_text_rot=30  ) {
+    rim_grip_arc=230, rim_text_rot=30  ) 
+    {
+        
     outer=diameter+(wallthickness*2);
         
     // do the outer wall
@@ -24,8 +26,8 @@ module jar_lid(height=20, diameter=90, threadpitch=4.9, wallthickness=3,
             // do the flat bottom plate
             cylinder(d=outer-1, h=wallthickness,$fa=2);
             // do the threads with the wall
-            inside_threaded_ring(pos=0,ht=height,dia=96,thread=90, 
-                pitch=4.9, rot=0);    
+            inside_threaded_ring(pos=0,ht=height,dia=outer,thread=diameter, 
+                pitch=threadpitch, rot=0);    
         }
         
         // this is the text on the rim
@@ -40,20 +42,21 @@ module jar_lid(height=20, diameter=90, threadpitch=4.9, wallthickness=3,
         /* text_on_cube(cube_size=[diameter,diameter,1.5], t=label,
             locn_vec=[0,0,3], face=top); */
         text_on_circle(r=diameter/2,middle=8.5, size=8,t=label1,
-            locn_vec=[0,0,2.1]);
-
-        // text on the outside
+            locn_vec=[0,0,wallthickness]);
+ 
+         // text on the outside
+        color("pink") {
         text_on_cube(cube_size=[diameter,diameter,wallthickness], t=label1,
-            locn_vec=[0,-15,wallthickness-1], rotate=[180,0,0]);
+            locn_vec=[0,-15,wallthickness/2], rotate=[0,0,0], face="bottom");
         text_on_cube(cube_size=[diameter,diameter,wallthickness], t=label2,
-            locn_vec=[0,-10,wallthickness-1], rotate=[180,0,0]);
+            locn_vec=[0,-10,wallthickness/2], rotate=[0,0,0], face="bottom");
         text_on_cube(cube_size=[diameter,diameter,wallthickness], t=label3,
-            locn_vec=[0,5,wallthickness-1], rotate=[180,0,0]);
+            locn_vec=[0,5,wallthickness/2], rotate=[0,0,0], face="bottom");
         text_on_cube(cube_size=[diameter,diameter,wallthickness], t=label4,
-            locn_vec=[0,10,wallthickness-1], rotate=[180,0,0]);    
+            locn_vec=[0,10,wallthickness/2], rotate=[0,0,0], face="bottom");    
         text_on_cube(cube_size=[diameter,diameter,wallthickness], t=label5,
-            locn_vec=[0,15,wallthickness-1], rotate=[180,0,0]);
-      
+            locn_vec=[0,15,wallthickness/2], rotate=[0,0,0], face="bottom");
+        }
     }
 }
 
