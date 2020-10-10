@@ -6,7 +6,7 @@
 include <threads.scad>  // from http://dkprojects.net/openscad-threads/
 include <text_on.scad>  // from https://github.com/brodykenrick/text_on_OpenSCAD
 
-global_fn=90;
+global_fn=60;
 
 // originally designed to replace the talenti icecream lid
 // but with suitable dimensions, should work on peanut butter jars, etc
@@ -17,14 +17,22 @@ module jar_lid(height=20, diameter=90, threadpitch=4.9, wallthickness=3,
     label1="", label2="", label3="", label4="", label5="",
     rim_grip_arc=230, rim_text_rot=30  ) 
     {
-        
+
+    // there's an error in inside_threaded_ring, the nominal ID is wrong.
+    // when you specify an ID of 90.5, you get an ID of 85.2
+    // but we'd rather the input ID be the actual ID so callers
+    // don't need to remember the correction factor
+    correction=90.5 - 85.2;
+    diameter=diameter+correction;
+
+    // this is just convenient
     outer=diameter+(wallthickness*2);
         
     // do the outer wall
     difference(){
         union() {
             // do the flat bottom plate
-            cylinder(d=outer-1, h=wallthickness,$fa=2);
+            cylinder(d=outer-1, h=wallthickness,$fn=global_fn);
             // do the threads with the wall
             inside_threaded_ring(pos=0,ht=height,dia=outer,thread=diameter, 
                 pitch=threadpitch, rot=0);    
@@ -46,16 +54,16 @@ module jar_lid(height=20, diameter=90, threadpitch=4.9, wallthickness=3,
  
          // text on the outside
         color("pink") {
-        text_on_cube(cube_size=[diameter,diameter,wallthickness], t=label1,
-            locn_vec=[0,-15,wallthickness/2], rotate=[0,0,0], face="bottom");
-        text_on_cube(cube_size=[diameter,diameter,wallthickness], t=label2,
+        text_on_cube(cube_size=[diameter,diameter,wallthickness], t=label1, size=6.5,
+            locn_vec=[0,-20,wallthickness/2], rotate=[0,0,0], face="bottom");
+        text_on_cube(cube_size=[diameter,diameter,wallthickness], t=label2, size=6.5,
             locn_vec=[0,-10,wallthickness/2], rotate=[0,0,0], face="bottom");
-        text_on_cube(cube_size=[diameter,diameter,wallthickness], t=label3,
-            locn_vec=[0,5,wallthickness/2], rotate=[0,0,0], face="bottom");
-        text_on_cube(cube_size=[diameter,diameter,wallthickness], t=label4,
-            locn_vec=[0,10,wallthickness/2], rotate=[0,0,0], face="bottom");    
-        text_on_cube(cube_size=[diameter,diameter,wallthickness], t=label5,
-            locn_vec=[0,15,wallthickness/2], rotate=[0,0,0], face="bottom");
+        text_on_cube(cube_size=[diameter,diameter,wallthickness], t=label3, size=6.5,
+            locn_vec=[0,10,wallthickness/2], rotate=[0,0,0], face="bottom");
+        text_on_cube(cube_size=[diameter,diameter,wallthickness], t=label4, size=6.5,
+            locn_vec=[0,20,wallthickness/2], rotate=[0,0,0], face="bottom");    
+        text_on_cube(cube_size=[diameter,diameter,wallthickness], t=label5, size=6.5,
+            locn_vec=[0,30,wallthickness/2], rotate=[0,0,0], face="bottom");
         }
     }
 }
