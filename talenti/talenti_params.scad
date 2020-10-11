@@ -1,6 +1,6 @@
 // general params for the official talenti lid.
 lid_height=20;
-lid_inner_diameter=85.2;
+lid_inner_diameter=86;
 lid_thread_pitch=4.9;
 lid_wallthickness=3;
 lid_rim_grip_arc=250;

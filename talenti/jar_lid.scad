@@ -23,6 +23,7 @@ module jar_lid(height=20, diameter=90, threadpitch=4.9, wallthickness=3,
     // but we'd rather the input ID be the actual ID so callers
     // don't need to remember the correction factor
     correction=90.5 - 85.2;
+    w=3;
     diameter=diameter+correction;
 
     // this is just convenient
@@ -34,16 +35,26 @@ module jar_lid(height=20, diameter=90, threadpitch=4.9, wallthickness=3,
             // do the flat bottom plate
             cylinder(d=outer-1, h=wallthickness,$fn=global_fn);
             // do the threads with the wall
-            inside_threaded_ring(pos=0,ht=height,dia=outer,thread=diameter, 
-                pitch=threadpitch, rot=0);    
+            difference() {
+                inside_threaded_ring(pos=0,ht=height,dia=outer,
+                thread=diameter,  pitch=threadpitch, rot=0);    
+                
+                // thread cutouts on the inside.  This would not be
+                // necessary if we had better thread library, but 
+                // we see this on, for example coke plastic bottle lids
+                // where the bottle and lid are two different materials
+                grip_cutouts(pos=0, dia=diameter-correction, 
+                    wid=w*2, ht=height+wallthickness, cnt=17, arc=360);
+            }
         }
         
         // this is the text on the rim
-        rotate(rim_text_rot) text_on_cylinder(t=label1,r=((diameter/2)+wallthickness), 
+        rotate(rim_text_rot) text_on_cylinder(t=label1,
+            r=((diameter/2)+wallthickness), 
             h=height*1.1, size=14*5/9);
         
         // grippy bits on the rim outside
-        grip_cutouts(pos=wallthickness/3, dia=outer+1.5, wid=3, 
+        grip_cutouts(pos=wallthickness/3, dia=outer+1.5, wid=w, 
                 ht=height-wallthickness, cnt=100, arc=rim_grip_arc);
         
         // text on the inside
