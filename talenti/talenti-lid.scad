@@ -1,11 +1,10 @@
 // talenti icecream lid with rear-lens-cap insert
 
-include <jar_lid.scad> // library for making a lid that fits talenti ice cream jars
-
-include <talenti_params.scad>
+include <jar_lid.scad> // library for making a lid for plastic jars
+include <talenti_params.scad> // talenti ice cream jar
 
 L1="Nikon F-Mount";   // outside rim, inside flat surface, outside flat surface
-// L2="for Talenti Jar"; // "Nikkor 55mm f1.2"; // outside flat surface line 2
+// L2="Jar Type";  // outside flat surface line 2
 L3=""; // "Property of:";     // outside flat surface line 3
 L4="Barry A Dobyns";   // outside flat surface line 4
 L5="408-981-4746";     // outside flat surface line 5
