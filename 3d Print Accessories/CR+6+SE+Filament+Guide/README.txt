@@ -1,0 +1,1 @@
+CR 6 SE Filament Guide by Cprints on Thingiverse: https://www.thingiverse.com/thing:4594094
