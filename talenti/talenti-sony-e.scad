@@ -18,6 +18,14 @@ union() {
 
     // this gets the mount in from someone else's designed file
     // http://www.thingiverse.com/thing:753741
-    translate([-31,-31,0.46]) color("blue") 
-        import("mounts/E-mount_rear_lenscap.STL");
+    translate([0,25,1.9]) color("blue") 
+         import("mounts/Sony_E-mount_rear_lens_cap_v2.stl");
+    
+    // this makes sure the mount is attached to the lid
+    color("red") hollow_ring(pos=1,od=60,id=48,ht=7,$fn=60);
+    
+    // this is the index mark
+    rotate([0,0,0]) color("green") translate([0,-34,3]) 
+        sphere(r=3,$fn=60);
 }
+
