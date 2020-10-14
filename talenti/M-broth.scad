@@ -1,13 +1,13 @@
-// talenti icecream lid with rear-lens-cap insert
+// broth lid with rear-lens-cap insert
 
 include <jar_lid.scad> // library for making a lid for plastic jars
-include <params-talenti.scad> // talenti ice cream jar
+include <broth_params.scad> // talenti ice cream jar
 
-L1="Sony E-Mount";   // outside rim, inside flat surface, outside flat surface
+L1="Leica M";   // outside rim, inside flat surface, outside flat surface
 // L2="Jar Type";  // outside flat surface line 2
 L3=""; // "Property of:";     // outside flat surface line 3
-L4="Barry A Dobyns";   // outside flat surface line 4
-L5="408-981-4746";     // outside flat surface line 5
+L4=" ";   // outside flat surface line 4
+L5=" ";     // outside flat surface line 5
 
 union() {
     jar_lid(height=lid_height, diameter=lid_inner_diameter, 
@@ -18,14 +18,10 @@ union() {
 
     // this gets the mount in from someone else's designed file
     // http://www.thingiverse.com/thing:753741
-    translate([0,25,1.9]) color("blue") 
-         import("mounts/Sony_E-mount_rear_lens_cap_v2.stl");
+    translate([-25.5,-25.5,1]) color("blue") 
+         import("mounts/Leica_M_lens_rear_cap_fixed.stl");
     
     // this makes sure the mount is attached to the lid
-    color("red") hollow_ring(pos=1,od=60,id=48,ht=7,$fn=60);
-    
-    // this is the index mark
-    rotate([0,0,0]) color("green") translate([0,-34,3]) 
-        sphere(r=3,$fn=60);
+    color("red") hollow_ring(pos=1,od=51,id=45,ht=22,$fn=60);
 }
 

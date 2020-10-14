@@ -1,13 +1,15 @@
 // talenti icecream lid with rear-lens-cap insert
 
 include <jar_lid.scad> // library for making a lid for plastic jars
-include <params-talenti.scad> // talenti ice cream jar
+include <params-broth.scad> // talenti ice cream jar
 
-L1="Sony E-Mount";   // outside rim, inside flat surface, outside flat surface
+L1="Sony E";   // outside rim, inside flat surface, outside flat surface
 // L2="Jar Type";  // outside flat surface line 2
 L3=""; // "Property of:";     // outside flat surface line 3
-L4="Barry A Dobyns";   // outside flat surface line 4
-L5="408-981-4746";     // outside flat surface line 5
+L4=""; //"Barry A Dobyns";   // outside flat surface line 4
+L5=""; //"408-981-4746";     // outside flat surface line 5
+
+lid_height=25;
 
 union() {
     jar_lid(height=lid_height, diameter=lid_inner_diameter, 
@@ -21,11 +23,13 @@ union() {
     translate([0,25,1.9]) color("blue") 
          import("mounts/Sony_E-mount_rear_lens_cap_v2.stl");
     
-    // this makes sure the mount is attached to the lid
-    color("red") hollow_ring(pos=1,od=60,id=48,ht=7,$fn=60);
-    
+    // just cover the whole base with this riser
+    // since the lid top can't actually reach this deep.
+    color("red") hollow_ring(pos=3,od=66,id=55,ht=7,$fn=60);
+
     // this is the index mark
-    rotate([0,0,0]) color("green") translate([0,-34,3]) 
+/*  rotate([0,0,0]) color("green") translate([0,-34,3]) 
         sphere(r=3,$fn=60);
+*/
 }
 
