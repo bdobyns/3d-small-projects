@@ -1,4 +1,7 @@
-// talenti icecream lid with rear-lens-cap insert
+// broth lid with rear-lens-cap insert
+// this probably won't work because the rear end of the sony lenses
+// are too fat to fit inside the jar part of the jar, which only 
+// has 53.5mm of clearance.
 
 include <jar_lid.scad> // library for making a lid for plastic jars
 include <params-broth.scad> // talenti ice cream jar

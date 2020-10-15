@@ -1,13 +1,13 @@
 // talenti icecream lid with rear-lens-cap insert
 
 include <jar_lid.scad> // library for making a lid for plastic jars
-include <talenti_params.scad> // talenti ice cream jar
+include <params-talenti.scad> // talenti ice cream jar
 
 L1="Minolta SR MD";   // outside rim, inside flat surface, outside flat surface
 // L2="Jar Type";  // outside flat surface line 2
 L3=""; // "Property of:";     // outside flat surface line 3
-L4="Barry A Dobyns";   // outside flat surface line 4
-L5="408-981-4746";     // outside flat surface line 5
+L4=""; // "Barry A Dobyns";   // outside flat surface line 4
+L5=""; // "408-981-4746";     // outside flat surface line 5
 
 union() {
     jar_lid(height=lid_height, diameter=lid_inner_diameter, 
