@@ -1,0 +1,22 @@
+Email Address: litho@1e72.com
+Pictures: three-graces-straight-26.4.jpg,three-graces-straight-26.4.jpg,,,
+Height Control: Crop Photos Equally
+Lithophane Resolution: 0.2
+Top Diameter: 150
+Bottom Diameter: 150
+Number of Half-Waves: 0
+Size of Waves: 0
+Height: 155
+Base Width and Height: 3
+Overhang Angle: 45
+Maximum Thickness: 3.0
+Minimum Thickness: 0.8
+Spacing Between Pictures: 0
+Spacing Brightness: 0
+Frame Options: Ledge Interface
+Ledge Diameter: 27.6
+Ledge Height: 25
+Cylinder Diameter: 33.4
+Cylinder and Ledge Thickness: 2.5
+Spoke Thickness: 5
+Spoke Depth: 12.5
