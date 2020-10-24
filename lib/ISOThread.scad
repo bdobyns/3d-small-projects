@@ -10,6 +10,7 @@ WrenchSizes=0;	// =0= Rolson sizes, =1=Fairbury sizes
 
 //--demo functions--------------------------------------------------------------
 
+// wing_nut(8);                         // make an M8 wingnut
 //hex_bolt(10,16);						// make an M10 x 16 ISO bolt
 //hex_nut(10);							// make an M10 ISO nut
 //hex_bolt(8,16);						// make an M8 x 16 ISO bolt
@@ -74,6 +75,22 @@ module hex_bolt(dia,hi)
 {
 	if (WrenchSizes==0)	rolson_hex_bolt(dia,hi);
 	else					fairbury_hex_bolt(dia,hi);
+}
+
+module wing_nut(dia,hi) // added by b.dobyns 2020-10-23
+// make an ISO nut
+//  dia=diameter, 6=M6 etc.
+{
+//	if (WrenchSizes==0)	
+    e=3; // a small epsilon
+    w= ( dia/2 > e ) ? dia / e : e ; // wing width
+    p= w/2; // wing position
+    translate([-(dia),p ,dia/2]) rotate([90,0,0]) cylinder(d=dia,h=w);
+    translate([dia,p ,dia/2]) rotate([90,0,0]) cylinder(d=dia,h=w);
+    translate([-(dia+1),p ,dia/2]) rotate([90,0,0]) cylinder(d=dia,h=w);
+    translate([dia+1,p ,dia/2]) rotate([90,0,0]) cylinder(d=dia,h=w);
+        rolson_hex_nut(dia);
+//	else					fairbury_hex_nut(dia);
 }
 
 module hex_nut(dia,hi)
