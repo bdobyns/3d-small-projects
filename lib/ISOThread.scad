@@ -89,7 +89,7 @@ module wing_nut(dia,hi) // added by b.dobyns 2020-10-23
     translate([dia,p ,dia/2]) rotate([90,0,0]) cylinder(d=dia,h=w);
     translate([-(dia+1),p ,dia/2]) rotate([90,0,0]) cylinder(d=dia,h=w);
     translate([dia+1,p ,dia/2]) rotate([90,0,0]) cylinder(d=dia,h=w);
-        rolson_hex_nut(dia);
+        rolson_hex_nut(dia,hi);
 //	else					fairbury_hex_nut(dia);
 }
 
