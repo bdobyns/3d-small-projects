@@ -4,7 +4,7 @@
 use <cubeX.scad>;
 
 // center part unmodified
-rotate ([90,0,0]) import("main body.stl");
+rotate ([90,0,0]) import("large body.stl");
 
 
 // one redesigned side (the old one was the wrong shape)
@@ -15,6 +15,7 @@ side();
 // the other side
 rotate([0,0,180]) side();
 
+/*
 // two of the redesigned bolts with heads
 translate([15,15,0]) bolt_with_head();
 translate([-15,15,0]) bolt_with_head();
@@ -24,6 +25,7 @@ translate([15,0,0]) one_nut();
 translate([-15,0,0]) one_nut();
 translate([15,-15,0]) one_nut();
 translate([-15,-15,0]) one_nut();
+*/
 
 module side() {
     translate([0,-7,0])  
