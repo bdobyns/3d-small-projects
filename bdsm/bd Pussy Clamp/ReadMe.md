@@ -8,7 +8,7 @@ This is a remix of two designs that came from Cult3d [pussy-clamp-wide][wide] an
 ### **nut.stl** and **bolt.stl** 
 are the [original][wide] nut and bolt to hold the parts together. Both *nut.stl* and *bolt.stl* are compatible with imperial 1/4-28 nuts from your hardware store. The *bolt.stl* is a 4" threaded rod with no head. The *nut.stl* has a knurled outer surface (easier to grip than a hex nut).  
 
-You could also substitute metal 1/4-28 hardware, or metric M8 hardware if you find *nut.stl* and *bolt.stl* too difficult to print.  
+You could also substitute metal 1/4-28 hardware, or metric M8 hardware if you find *nut.stl* and *bolt.stl* too difficult to print.  Substituting metal makes the whole assembly heavier, which may be fine by your victim, or not.
 
 I should redesign these to use a 1/4-20 coarse thread which you can also get at your hardware store.  It's tempting to go even coarser, say to 1/4-16 thread which would probably print easier but you can't get that at the hardware store to use for cleanup of your printed parts.
 
@@ -19,9 +19,15 @@ The threads of *nut.stl* and the *bolt.stl* can be cleaned up by being threaded 
 [tap-and-die]: https://www.amazon.com/Standard-Screw-Extractor-Remover-Thread/dp/B07YCTT43T/
 
 ### **Large Pussy Clamp.scad** 
-contains the redesigned sides for the [large one][wide].  The *large body.stl* is [unchanged][wide]. The center hole of *large body.stl* is a full circle. **Instead** of *large side.stl* this one has outer sides that are flush with the inner body when closed, and is a full redesign, including both the main radius and the ears.  This uses just four *nut.stl* because the sides come so close to the body.  There's also some copies of *nut.stl* and *
+contains the redesigned sides for the [large clamp][wide].  The *large body.stl* is [unchanged][wide]. The center hole of *large body.stl* is a 63mm or 2.5" circle, which is very large indeed. 
+
+**Instead** of *large side.stl* we have and is a full redesign.  This one has *sides* that are flush with the outside radius of the *large body.stl* when closed, at about 75mm or 3", and the ears are flush as well.  This uses just four *nut.stl* because the ears are flush.
+
+There's also some copies of *nut.stl* and a redesigned *bolt.stl* inside that has a knurled end on one end of the bolt so you can grip it.  These are commented out, and I recommend you don't try to print them at the same time as the sides and body.
 
 ### **Large-Pussy-Clamp-v2.scad** 
+The *large body.stl* is [unchanged][wide].
+
 This is a redesign of *large side.stl* with the radius changed. The ears are taken from the *large side.stl*, and amount to a standoff so you can't get the flesh clamped in there too tight.  The originals had a letter embossed in the surface, but the letters never made any sense to me and made that surface hard to print, so that's now removed. 
 
 This uses **eight** *nut.stl* and two *bolt.stl*, two on either side of the *large body.stl* and two on the outside of the *large side.stl*. This is because the *large side.stl* has an integrated standoff, so there's room for two inner *nut.stl* to hold the *bolt.stl* in place. It works best if you either make a half-height *nut.stl* or a brass 1/4-28 nut for the inner ones, so there's room.
@@ -29,8 +35,12 @@ This uses **eight** *nut.stl* and two *bolt.stl*, two on either side of the *lar
 ### **narrow Pussy Clamp.scad** 
 contains the unmodified *narrow body.stl* and two *narrow_side.stl* from the [original][narrow], but the text has been removed. This uses **eight** *nut.stl* and two *bolt.stl*, as above.
 
+The *narrow body.stl* is about 29mm or 1.15" in the inner width along the short axis, which may be too narrow to get *certain* things thru it, but is certainly large enough for a finger.  
+
+There's a 2mm gap between *narrow body.stl* and two *narrow_side.stl* when the screws are all the way down, because of the standoffs.  The outer width along the short axis of the *narrow body.stl* is about 39mm or 1.55".  The inner width of the sides about 42mm or 1.6" between the two *narrow_side.stl* short axis. 
+
 ### **Medium Pussy Clamp** 
-Only as gcode, this  is just the [narrow scad][narrow] stl scaled up by 150% in the Y direction. Scaling it this way also makes the ears that the *bolt.stl* runs thru wider, as well as the radii under stress, which probably makes the whole thing stronger. 
+Only as gcode, this  is just the [narrow scad][narrow] stl scaled up by 150% in the Y direction (the narrow axis). Scaling it this way also makes the ears that the *bolt.stl* runs thru wider, as well as the radii under stress, which probably makes the whole thing stronger. 
 
 Frankly you should probably start with this one as it's less likely to break.
 
