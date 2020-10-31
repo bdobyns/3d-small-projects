@@ -1,4 +1,4 @@
-## bd Pussy Clamp
+## Overview of /bd-Pussy-Clamp
 
 This is a remix of several designs that came from Cult3d where I felt like the inner radius of the outer sides of the large clamp was simply wrong.
 
@@ -18,19 +18,70 @@ These are particularly tricky to print, and I don't know why they used 1/4-28 in
 
 ## Printing tips
 
-I've tried to print these all together in one big print but that always seems to fail.  So its better to print one piece at a time.
+I've tried to print these all together in one big print but that is sometimes very tricky.  
+So its better to print one piece at a time. especially troublesome.
 
-In PLA printing, I usually
+The surfaces that touch the flesh you're clamping need less cleanup if you print flat. You need supports whether you print flat on it's side, or standing up (the 'normal' orientation in the original STL files).  
 
-thing | value
-------| -----------
-slicer | Cura 4.7.1 or PrusaSlicer 2.2 (doesn't seem to make much difference)
-material | PLA (except the damn Novamaker PLA)
+Good results with [Creality White PLA][crealitywhite], [Meperper Blue PLA][meperperblue], [3d Solutech PLA][3dsolutech]
+
+Terrible results with [NovaMaker pink PLA][novamakerpink]
+
+[crealitywhite]: https://www.amazon.com/dp/B08CL2D3Y8/
+[meperperblue]: https://www.amazon.com/gp/product/B085K15P44/
+[3dsolutech]: https://www.amazon.com/gp/product/B00MF03LAE/
+[novamakerpink]: https://www.amazon.com/gp/product/B071G5QBRK/
+
+parameters | value
+-------| -----------
+material | PLA
 Hot End | 200 C
 Bed | 60 C
 Speed | 50mm/sec
 infill | 50% to 80% 
 brim | yes 
-support | yes (this fills in the hole so it doesn't sag)
+support | yes
 nozzle | 0.4mm
 layer height | 0.2mm
+
+## SCAD Fles
+file | description
+-----|----
+**Large Pussy Clamp.scad** | my first attempt at replacement sides. sides fully scratch designed. fits flush against the side of the body piece with no enforced gap. imports **large body.stl**. | 
+**Large-Pussy-Clamp-v2.scad** | second attempt at replacement sides. same arc as v1. but reused the ears from the original. which include a standoff. removed the embossed text. imports **large body.stl** and **large side.stl**  | 
+**narrow Pussy Clamp.scad** | both the sides and body are original. but removed all the embossed text. this has a acceptable curve and standoffs in the ears. Can be scaled 150% Y to get a slightly wider center hole. imports **narrow body.stl** and **narrow\_side.stl**  | 
+**cubeX.scad** | a library for rounded boxes |  
+**cubeX-test.scad** | a test for the cubeX lib | 
+
+## Ready-To-Print GCODE files 
+
+gcode file | description | orient | brim | supports | infill | slicer
+------|------|--------|-----|----|----|---
+**6SE\_4\_bolt flat.gcode** | all four of the bolts | flat | no | supports | 80% | Cura 4.8.0
+**6SE\_large body flat.gcode** | the large body, with the text still | flat | no | supports | 80% | Cura 4.8.0
+**6SE\_narrow body flat.gcode** | narrow body | flat | no | supports | 80% |Cura 4.8.0
+**6SE\_narrow\_side flat.gcode** | narrow side 1 pc | flat | no | supports | 80% |Cura 4.8.0
+**CE3\_large body flat.gcode** | large body | flat | brim | supports | 80% |Cura 4.7.1
+**CE3\_narrow body flat.gcode** | narrow body | flat | brim | supports | 80% |Cura 4.7.1
+**CE3\_narrow\_side flat.gcode** | narrow side 1 pc | flat | brim | supports | 80% |Cura 4.7.1
+**Large Pussy Clamp All\_0.2mm\_50%\_PLA\_ENDER3\_4h4m.gcode** | large body, side 2 pc, no text | flat | brim | supports | 50% |Prusa 2.2
+**Medium Pussy Clamp all\_0.2mm\_50%\_PLA\_ENDER3\_4h27m.gcode** | medium body, side 2 pc, no text, narrow at 150% Y | flat | brim | supports | 50% | Prusa 2.2
+**narrow Pussy Clamp all\_0.2mm\_50%\_PLA\_ENDER3\_3h21m.gcode** | narrow body, side 2 pc, no text | flat | brim | supports | 50% | Prusa 2.2
+
+
+## STL Files
+File Name | description | origin | place
+----|----|----|---
+**Large Pussy Clamp all.stl** | large body, sides 2 pc | **Large Pussy Clamp.scad** | scad
+**narrow Pussy Clamp all.stl** | narrow body, sides 2 pc | **narrow Pussy Clamp.scad** | scad
+**narrow sides Pussy Clamp.stl** | sides 2 pc | **narrow Pussy Clamp.scad** | scad
+**bolt.stl** | one bolt | pussy-clamp-wide-thecuddlesdom | cult3d
+**large body.stl** | large body | pussy-clamp-wide-thecuddlesdom | cult3d
+**large side.stl** | large side | pussy-clamp-wide-thecuddlesdom | cult3d
+**narrow body.stl** | narrow body | pussy-clamp-narrow | cult3d
+**narrow_side.stl** | narrow side | pussy-clamp-narrow | cult3d
+**nut.stl** | one knurled nut | pussy-clamp-wide-thecuddlesdom | cult3d
+
+
+
+
