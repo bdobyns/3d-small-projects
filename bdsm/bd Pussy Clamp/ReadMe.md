@@ -4,15 +4,36 @@ This is a remix of two designs that came from Cult3d [pussy-clamp-wide][wide] an
 
 [wide]: https://cults3d.com/en/3d-model/naughties/pussy-clamp-wide-thecuddlesdom
 [narrow]: https://cults3d.com/en/3d-model/naughties/pussy-clamp-narrow
+[crealitywhite]: https://www.amazon.com/dp/B08CL2D3Y8/
+[meperperblue]: https://www.amazon.com/gp/product/B085K15P44/
+[3dsolutech]: https://www.amazon.com/gp/product/B00MF03LAE/
+[novamakerpink]: https://www.amazon.com/gp/product/B071G5QBRK/
+[cr6se]: https://www.creality3dofficial.com/products/creality-cr-6-se-3d-printer
+
+## TL;DR 
+
+param | **nut.stl** | **bolt.stl** | body | sides
+----|----|----|----|----
+printer | [CR-6 SE][cr6se] | [CR-6 SE][cr6se] | [CR-6 SE][cr6se] | [CR-6 SE][cr6se]
+orientation | lay flat | hole vertical | lay flat | lay flat
+layer height | 0.12 | 0.12 | 0.20 | 0.20
+raft layers | 3 | 3 | no | no
+brim | no | no | yes | yes
+glue stick | yes | yes | yes | yes
+supports | no | no | yes | yes
+hot end | 200C | 200C | 200C | 200C
+
 
 ### **nut.stl** and **bolt.stl** 
 are the [original][wide] nut and bolt to hold the parts together. Both *nut.stl* and *bolt.stl* are compatible with imperial 1/4-28 nuts from your hardware store. The *bolt.stl* is a 4" threaded rod with no head. The *nut.stl* has a knurled outer surface (easier to grip than a hex nut).  
 
+You should print both *nut.stl* and *bolt.stl* at a **0.12 layer height** so that the threads actually work. *bolt.stl* benefits from rotating in your slicer so it **lays flat** printing on a **3-layer raft**, and I've successfully printed eight at a time with a raft.
+
+
+
 You could also substitute metal 1/4-28 hardware, or metric M8 hardware if you find *nut.stl* and *bolt.stl* too difficult to print.  Substituting metal makes the whole assembly heavier, which may be fine by your victim, or not.
 
 I should redesign these to use a 1/4-20 coarse thread which you can also get at your hardware store.  It's tempting to go even coarser, say to 1/4-16 thread which would probably print easier but you can't get that at the hardware store to use for cleanup of your printed parts.
-
-These are particularly tricky to print. The *bolt.stl* is too fragile if you print it vertical, even at 100% infill.  The *nut.stl* sags, no matter what orientation you print in.  Even so, it can be done. 
 
 The threads of *nut.stl* and the *bolt.stl* can be cleaned up by being threaded onto a common metal 1/4-28 nut or bolt a half-dozen times. If you had a [tap and die set][tap-and-die] that's even better. 
 
@@ -61,13 +82,10 @@ If you scale it 200% in the Y direction, then the center hole becomes a circle t
 * Good results with [Creality White PLA][crealitywhite], [Meperper Blue PLA][meperperblue], [3d Solutech PLA][3dsolutech]
 * Terrible results with [NovaMaker pink PLA][novamakerpink] which is  especially troublesome.
 
-[crealitywhite]: https://www.amazon.com/dp/B08CL2D3Y8/
-[meperperblue]: https://www.amazon.com/gp/product/B085K15P44/
-[3dsolutech]: https://www.amazon.com/gp/product/B00MF03LAE/
-[novamakerpink]: https://www.amazon.com/gp/product/B071G5QBRK/
 
 parameters | value
 -------| -----------
+printer |  [Creality CR-6 SE][cr6se] 
 material | PLA
 Hot End | 200 C
 Bed | 60 C
@@ -91,10 +109,9 @@ file | description
 
 gcode file | description | orient | brim | supports | infill | slicer
 ------|------|--------|-----|----|----|---
-**6SE\_4\_bolt flat.gcode** | four of the bolts | flat | no | supports | 80% | Cura 4.8.0
-**6SE\_large body flat.gcode** | the large body, with the text still | flat | no | supports | 80% | Cura 4.8.0
-**6SE\_narrow body flat.gcode** | narrow body | flat | no | supports | 80% |Cura 4.8.0
-**6SE\_narrow\_side flat.gcode** | narrow side 1 pc | flat | no | supports | 80% |Cura 4.8.0
+**CR6\_large body flat.gcode** | the large body, with the text still | flat | no | supports | 80% | Cura 4.8.0
+**CR6\_narrow body flat.gcode** | narrow body | flat | no | supports | 80% |Cura 4.8.0
+**CR6\_narrow\_side flat.gcode** | narrow side 1 pc | flat | no | supports | 80% |Cura 4.8.0
 **CE3\_large body flat.gcode** | large body | flat | brim | supports | 80% |Cura 4.7.1
 **CE3\_narrow body flat.gcode** | narrow body | flat | brim | supports | 80% |Cura 4.7.1
 **CE3\_narrow\_side flat.gcode** | narrow side 1 pc | flat | brim | supports | 80% |Cura 4.7.1
@@ -102,6 +119,7 @@ gcode file | description | orient | brim | supports | infill | slicer
 **Medium Pussy Clamp all\_0.2mm\_50%\_PLA\_ENDER3\_4h27m.gcode** | medium body, side 2 pc, no text, narrow at 150% Y | flat | brim | supports | 50% | Prusa 2.2
 **narrow Pussy Clamp all\_0.2mm\_50%\_PLA\_ENDER3\_3h21m.gcode** | narrow body, side 2 pc, no text | flat | brim | supports | 50% | Prusa 2.2
 
+[netfabb]: https://service.netfabb.com/service.php
 
 ## STL Files
 file Name | description | origin | from
@@ -110,6 +128,7 @@ file Name | description | origin | from
 **narrow Pussy Clamp all.stl** | narrow body, sides 2 pc | **narrow Pussy Clamp.scad** | scad
 **narrow sides Pussy Clamp.stl** | sides 2 pc | **narrow Pussy Clamp.scad** | scad
 **bolt.stl** | one bolt |  [pussy-clamp-wide][wide]  | cults3d
+**bolt_fixed.stl** | one bolt |  **bolt.stl**  | [netfabb][netfabb]
 **large body.stl** | large body |  [pussy-clamp-wide][wide]  | cults3d
 **large side.stl** | large side | [pussy-clamp-wide][wide]  | cults3d
 **narrow body.stl** | narrow body |  [pussy-clamp-narrow][narrow]  | cults3d
