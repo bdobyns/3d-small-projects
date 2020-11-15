@@ -15,7 +15,7 @@ fi
 find . -iname '*'$1'*' | while read f
 do
    j=$( echo $f | sed -e s/$1/$2/ )
-   if ! git mv "$f" "$j"
+   if ! git mv "$f" "$j" 2>/dev/null >/dev/null
    then mv "$f" "$j"
    fi
  done

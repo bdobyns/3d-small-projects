@@ -17,6 +17,7 @@ param | **nut.stl** | **bolt.stl** | body | sides
 printer | [CR-6 SE][cr6se] | [CR-6 SE][cr6se] | [CR-6 SE][cr6se] | [CR-6 SE][cr6se]
 orientation | lay flat | hole vertical | lay flat | lay flat
 layer height | 0.12 | 0.12 | 0.20 | 0.20
+print speed | 25mm/s | 25mm/s | 50mm/s | 50mm/s
 raft layers | 3 | 3 | no | no
 brim | no | no | yes | yes
 glue stick | yes | yes | yes | yes

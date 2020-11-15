@@ -7,8 +7,25 @@
 
 include<../../lib/text_on.scad>
 
+/*  
+the first column is values for 'sensor'
++-------+-------+------+
+| type  | vert  | horz |
++-------+-------+------+
+| 35mm  | 24    | 36   |
+| APS-C | 16.7  | 25.1 |
+| 4/3   | 13.5  | 18mm |
+| 6x4.5 | 56.9  | 41.8 |
+| 6x6   | 56.9  | 56.9 |
+| 6x7   | 56.9  | 66.9 |
+| 6x9   | 56.9  | 83.7 |
+| 6x12  | 56.9  | 110  |
++-------+-------+------+
+*/
+
+
 // the inputs
-focal_length=16; // the real focal length of your lens (not a 35mm equivalent)
+focal_length=35; // the real focal length of your lens (not a 35mm equivalent)
 sensor="APS-C"; // the format of your film camera or digital sensor
 hood_inner_diameter=42.6; // the inner diameter of the hood where it slips over the lens
 rim_height=2;  // the height of the straight portion at the lens
@@ -31,22 +48,6 @@ module make_sq_hood() {
 e=0.3;      // a small epsilon
 box_corner_radius=3;   // rounding at the corners of the hood square end
 $fn=90;       // make round things more round
-
-/*  
-typical usable film sensor dimensions
-+-------+-------+------+
-| type  | vert  | horz |
-+-------+-------+------+
-| 35mm  | 24    | 36   |
-| APS-C | 16.7  | 25.1 |
-| 4/3   | 13.5  | 18mm |
-| 6x4.5 | 56.9  | 41.8 |
-| 6x6   | 56.9  | 56.9 |
-| 6x7   | 56.9  | 66.9 |
-| 6x9   | 56.9  | 83.7 |
-| 6x12  | 56.9  | 110  |
-+-------+-------+------+
-*/
 
 Image_plane_vertical=v_lookup(sensor);  echo(Image_plane_vertical=Image_plane_vertical);
 image_plane_horizontal=h_lookup(sensor); echo(image_plane_horizontal=image_plane_horizontal);
