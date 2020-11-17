@@ -21,61 +21,44 @@ spc=dia+2;  // spacing between holes mm
 strt=5;     // where to start each row mm
 e=.1;       // a small epsilon mm
 dbg_txt=false;   // debugging text on the hole cutouts
-edge_dims=false; // show the dims on the right edge, or left side
+edge_dims=true; // show the dims on the right edge, or left side
 
 
-difference() {
-    union() {
-        // I designed this facing the wrong way, so had to switch it late
-        translate([2,0,ht]) rotate([0,180,0]) 
-        // swiss cheese part
-        difference() {
-        // this is the basic triangle
-        linear_extrude(height=ht) 
-          polygon(points = [[0,0],[maxx,0],[0,maxy]]);
-           
-            // make a lot of holes (maybe more than we need? by cube filling?
-            for (xx = [ strt: spc: maxx ] ) {
-                for ( yy = [strt: spc : maxy ] ) {
-                   // don't draw the hole if it intersects the hypotenuse edge.  
-                   // This also means holes off to the far right get drawn as well.  okay.
-                   if (lineCircle(x1=maxx, y1=0, x2=0, y2=maxy, cx=xx, cy=yy, r=dia/2+e) == false )
-                        one_cyl(xx,yy,dia);
-                }
-            }
-        } // difference() of the wedge, and the holes
-        
-        // once we did the trigonometry to determine if the holes are on the edge, 
-        // it was easy to use the same trig to determine when to write the dim text
-        if(edge_dims) {
-            for (xx = [ strt: spc: maxx ] ) {
-                for ( yy = [strt: spc : maxy ] ) {
-                     // do some nozzle dims - if we skipped a hole because of the edge
-                    if ( (lineCircle(x1=maxx, y1=0, x2=0, y2=maxy, cx=xx, cy=yy, r=dia/2+e) == true)
-                        && (xx > strt) ) {
-                            tx = dims_txt[round((yy - strt)/spc)];
-                            dim_txt(tx,xx-2.3,yy,dia);
-                        }
-                 }
+
+union() {
+    // I designed this facing the wrong way, so had to switch it late
+    translate([2,0,ht]) rotate([0,180,0]) 
+    // swiss cheese part
+    difference() {
+    // this is the basic triangle
+    linear_extrude(height=ht) 
+      polygon(points = [[0,0],[maxx,0],[0,maxy]]);
+       
+        // make a lot of holes (maybe more than we need? by cube filling?
+        for (xx = [ strt: spc: maxx ] ) {
+            for ( yy = [strt: spc : maxy ] ) {
+               // don't draw the hole if it intersects the hypotenuse edge.  
+               // This also means holes off to the far right get drawn as well.  okay.
+               if (lineCircle(x1=maxx, y1=0, x2=0, y2=maxy, cx=xx, cy=yy, r=dia/2+e) == false )
+                    one_cyl(xx,yy,dia);
             }
         }
-        else /* left_dims */ {
-            xx=strt;
-            for ( yy = [strt: spc : maxy ]) {
-                if  (lineCircle(x1=maxx, y1=0, x2=0, y2=maxy, cx=xx, cy=yy, r=dia/2+e) == false) {
-                      tx = dims_txt[round((yy - strt)/spc)];
-                      // left_txt(tx,xx+spc/2,yy-spc/2+2*e,dia);
-                      left_txt(tx,1,yy,strt);
-                      }
-            }
-        }
-    } // union() of the swiss cheese and the dims-text
+    } // difference() of the wedge, and the holes
     
-    if (edge_dims) // only needed
-    // this is the inverse triangle - clip spurious text that overhangs the edge
-    linear_extrude(height=ht*2) 
-          polygon(points = [[maxx,maxy],[maxx,0],[0,maxy]]);
-}
+    // once we did the trigonometry to determine if the holes are on the edge, 
+    // it was easy to use the same trig to determine when to write the dim text
+    if(edge_dims)  {
+        xx=strt;
+        for ( yy = [strt: spc : maxy ]) {
+            if  (lineCircle(x1=maxx, y1=0, x2=0, y2=maxy, cx=xx, cy=yy, r=dia/2+e) == false) {
+                  tx = dims_txt[round((yy - strt)/spc)];
+                  // left_txt(tx,xx+spc/2,yy-spc/2+2*e,dia);
+                  left_txt(tx,1,yy,strt);
+                  }
+        }
+    }
+} // union() of the swiss cheese and the dims-text
+
 
 module one_cyl(xx=1, yy=1, dia=1) {
     translate([xx,yy,-0.5])  {
