@@ -8,32 +8,39 @@
 
 use<../lib/text_on.scad>
 
-// typically you need eight because you get eight rows.
-//   we print 0.4 on the two longest (bottom) rows because they are the most common
-//   we print 0.2 on the next two because after 0.4, they are more common than the others
+//   I print 0.4 on the two longest (bottom) rows because they are the most common
+//   I print 0.2 on the next two because after 0.4, they are more common than the others
+// text along the y-axis rail. typically you need eight dims because you get eight rows.
 dims_txt = ["0.4", "0.4", "0.2","0.3","0.5","0.6","0.8","1.0", "0.1",""]; 
 
-maxx = 64;  // x dimension of the triangle mm
-maxy = 84;  // y dimension of the triangle mm
-ht=7;       // how high the swiss cheese is mm
-dia=6.2;    // diameter of holes mm
-spc=dia+2;  // spacing between holes mm
-strt=5;     // where to start each row mm
-e=.1;       // a small epsilon mm
-dbg_txt=false;   // debugging text on the hole cutouts
-edge_dims=true; // show the dims on the right edge, or left side
-
-
+// x dimension of the triangle mm
+maxx = 64; 
+// y dimension of the triangle mm
+maxy = 84; 
+// how high the swiss cheese is mm
+ht=11;    
+// diameter of holes mm
+dia=6.2;   
+// spacing between holes mm
+spc=dia+2;  
+// where to start each row mm
+strt=5;   
+// a small epsilon mm - controls how close it gets to the hypotenuse
+e=.1;       
+// debugging text on the hole cutouts
+dbg_txt=false;   
+// show the dims on the right edge
+edge_dims=true; 
 
 union() {
     // I designed this facing the wrong way, so had to switch it late
     translate([2,0,ht]) rotate([0,180,0]) 
     // swiss cheese part
     difference() {
-    // this is the basic triangle
-    linear_extrude(height=ht) 
-      polygon(points = [[0,0],[maxx,0],[0,maxy]]);
-       
+        // this is the basic triangle
+        linear_extrude(height=ht) 
+          polygon(points = [[0,0],[maxx,0],[0,maxy]]);
+           
         // make a lot of holes (maybe more than we need? by cube filling?
         for (xx = [ strt: spc: maxx ] ) {
             for ( yy = [strt: spc : maxy ] ) {
@@ -41,8 +48,8 @@ union() {
                // This also means holes off to the far right get drawn as well.  okay.
                if (lineCircle(x1=maxx, y1=0, x2=0, y2=maxy, cx=xx, cy=yy, r=dia/2+e) == false )
                     one_cyl(xx,yy,dia);
-            }
-        }
+            } // for xx
+        } // for yy
     } // difference() of the wedge, and the holes
     
     // once we did the trigonometry to determine if the holes are on the edge, 
@@ -73,13 +80,13 @@ module one_cyl(xx=1, yy=1, dia=1) {
 
 module dim_txt(tx,xx,yy,dia) {
    translate([xx,yy,-0.5]) rotate([0,0,-55])  {
-     color("green") text_on_cube(cube_size=[dia,dia,ht*2.1],t=tx,size=1.5,face="top");
+     color("green") text_on_cube(cube_size=[dia,dia,ht*2.1],t=str(tx),size=1.5,face="top");
    }
 }
 
 module left_txt(tx,xx,yy,dia) {
    translate([xx,yy,-0.5]) rotate([0,0,-90]) 
-     color("green") text_on_cube(cube_size=[dia,dia,ht*2.1],t=tx,size=1.5,face="top");  
+     color("green") text_on_cube(cube_size=[dia,dia,ht*2.1],t=str(tx),size=1.5,face="top");  
 }
 
 
