@@ -25,14 +25,22 @@ the first column is values for 'sensor'
 
 
 // the inputs
-focal_length=35; // the real focal length of your lens (not a 35mm equivalent)
-sensor="APS-C"; // the format of your film camera or digital sensor
-hood_inner_diameter=42.6; // the inner diameter of the hood where it slips over the lens
-rim_height=2;  // the height of the straight portion at the lens
-hood_max=65; // never make a hood longer than this
-hood_thick=4;    // thickness of the walls 
-hood_text=false;  // do we emboss the focal length, inner diameter and format?
-alt_text="Sony E 16-50 kit lens"; // optional, goes on one long flat side
+// the real focal length of your lens (not a 35mm equivalent)
+focal_length=35; 
+// the format of your film camera or digital sensor (one of 35mm, APS-C, 4/3, 6x4.5, 6x6, 6x7, 6x9, 6x12)
+sensor="APS-C"; 
+// the inner diameter of the hood where it slips over the lens
+hood_inner_diameter=42.6; 
+// the height of the straight portion at the lens
+rim_height=3;  
+// never make a hood longer than this (personal preference)
+hood_max=65; 
+  // thickness of the walls  - too thin doesn't print well
+hood_thick=4;  
+ // do we emboss the focal length, inner diameter and format?
+hood_text=true; 
+// optional, goes on one long flat side
+alt_text="Sony E 16-50 kit lens"; 
 
 echo(focal_length=focal_length);
 echo(sensor=sensor);
