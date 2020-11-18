@@ -1,0 +1,2 @@
+translate([36.71,0,0]) import("/Users/bdobyns/Dropbox/Play/3dprint/3d-small-projects/bdsm/bd Pussy Clamp/Mc Master Carr/1.4-20-3in-90322A654_grooved-THREADED ROD.stl");
+translate([-76/2,0,0])import("/Users/bdobyns/Dropbox/Play/3dprint/3d-small-projects/bdsm/bd Pussy Clamp/Mc Master Carr/1.4-20-3in-90322A654_grooved-THREADED ROD.stl");
