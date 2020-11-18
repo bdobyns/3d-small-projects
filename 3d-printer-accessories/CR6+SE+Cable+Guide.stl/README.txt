@@ -1,0 +1,1 @@
+CR6 SE Cable Guide.stl by MB_AUZ on Thingiverse: https://www.thingiverse.com/thing:4606951

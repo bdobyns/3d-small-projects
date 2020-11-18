@@ -1,0 +1,1 @@
+Creality CR-6 SE Spoolholder by BurningTacco on Thingiverse: https://www.thingiverse.com/thing:4622894

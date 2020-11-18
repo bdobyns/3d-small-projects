@@ -1,0 +1,1 @@
+Spool Holder/Handle (Alt. file for Mini spools) (for the Creality CR-6 SE) by Height on Thingiverse: https://www.thingiverse.com/thing:4610711
