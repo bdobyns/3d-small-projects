@@ -1,0 +1,1 @@
+CR6SE Cable Guide with bowden Tube holder V1 stl by MB_AUZ on Thingiverse: https://www.thingiverse.com/thing:4653730

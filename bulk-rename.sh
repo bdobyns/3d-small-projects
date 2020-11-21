@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -z $2 ] ; then
+if [ -z "$2" ] ; then
     echo "usage:"
     echo $0 oldname newname
     echo '	'renames files containing oldname as PART of the filename 
@@ -12,9 +12,9 @@ if [ -z $2 ] ; then
     exit
 fi
 
-find . -iname '*'$1'*' | while read f
+find . -iname '*'"$1"'*' | while read f
 do
-   j=$( echo $f | sed -e s/$1/$2/ )
+   j=$( echo $f | sed -e s/"$1"/"$2"/ )
    if ! git mv "$f" "$j" 2>/dev/null >/dev/null
    then mv "$f" "$j"
    fi
